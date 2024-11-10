@@ -38,9 +38,8 @@ local main_window_state = new.bool(false)
 local info_window_state = new.bool(false)
 local active_tab = new.int(0)
 local sw, sh = getScreenResolution()
-local colorCode = imgui.new.char[9]("{1E90FF}")
-local tag = ffi.string(colorCode) .. "[RepFlow]: {FFFFFF}"
-local taginf = ffi.string(colorCode) .. "[Информация]: {FFFFFF}"
+local tag = "{1E90FF} [RepFlow]: {FFFFFF}"
+local taginf = "{1E90FF} [Информация]: {FFFFFF}"
 
 local startTime = 0 -- Время старта автоловли
 local gameMinimized = false  -- Флаг для отслеживания сворачивания игры
@@ -83,7 +82,6 @@ local ini = inicfg.load({
 		dialogHandlerEnabled = true,
         autoStartEnabled = true,
         otklflud = false,
-        colorCode = "{1E90FF}"
     },
     widget = {
         posX = 400,
@@ -91,15 +89,6 @@ local ini = inicfg.load({
     }
 }, IniFilename)
 local MoveWidget = false
-
--- Функция для загрузки colorCode из конфигурации
-local function loadColorCode()
-    local savedColor = ini.main.colorCode or "{1E90FF}" -- Загрузка сохраненного значения
-    savedColor = savedColor:sub(1, 8) -- Обрезаем строку до 7 символов, если она длиннее
-    for i = 1, #savedColor do
-        colorCode[i - 1] = savedColor:sub(i, i):byte() -- Копируем каждый символ в colorCode как байт
-    end
-end
 
 -- Применение загруженной конфигурации
 keyBind = tonumber(ini.main.keyBind)
@@ -111,8 +100,6 @@ dialogTimeout[0] = tonumber(ini.main.dialogTimeout)
 dialogHandlerEnabled[0] = ini.main.dialogHandlerEnabled
 autoStartEnabled[0] = ini.main.autoStartEnabled or false
 hideFloodMsg[0] = ini.main.otklflud
-savedColor = ini.main.colorCode
-loadColorCode()
 
 local themes = {
     {
@@ -422,7 +409,7 @@ function main()
 
         checkPauseAndDisableAutoStart() -- Проверяем сворачивание игры
         checkAutoStart() -- Выполняется с задержкой, если игра не свернута
-        --checkTelegramUpdates()
+
         imgui.Process = main_window_state[0] and not isGameMinimized
 
         -- Логика перемещения окна
@@ -472,12 +459,6 @@ function main()
             attemptCount = 0 -- Сбрасываем количество попыток
         end
     end
-end
-
--- Функция для обновления тегов с новым цветовым кодом
-local function updateTags()
-    tag = ffi.string(colorCode) .. "[RepFlow]: {FFFFFF}"
-    taginf = ffi.string(colorCode) .. "[Информация]: {FFFFFF}"
 end
 
 function resetIO()
@@ -729,20 +710,6 @@ function drawSettingsTab()
     imgui.SameLine()
     if imgui.Button(u8'Изменить положение') then
         startMovingWindow() -- Активируем перемещение окна при нажатии
-    end
-    imgui.Separator()
-    imgui.CenterText(u8'Изменение цвета сообщений в чате')
-    imgui.Text(u8"Введите HEX-код цвета (например, {FF5733}):")
-
-    -- Поле для ввода colorCode с максимальной длиной буфера
-    if imgui.InputText(u8"Цветовой код", colorCode, 9) then
-        updateTags() -- Обновляем теги при изменении colorCode
-    end
-
-    -- Кнопка для сохранения изменений в colorCode
-    if imgui.Button(u8"Сохранить цвет") then
-        saveColorCode() -- Сохраняем новое значение colorCode в конфиг
-        sampAddChatMessage(taginf .. "Цвет тегов обновлён", -1)
     end
 end
 
