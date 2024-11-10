@@ -11,46 +11,46 @@ local faicons = require('fAwesome6')
 local scriptver = "3.1 | Lite"
 
 local changelogEntries = {
-    { version = "2.6", description = "- Äîáàâëåíî îêíî èíôîðìàöèè.\n- Èñïðàâëåí áàã ñ ìàññîâûì ñïàìîì ïðè ñâîðà÷èâàíèè èãðû.\n- Èñïðàâëåí áàã ñ êðàøåì èãðû ïðè îêíå èíôîðìàöèè.\n- Äîáàâëåíà íîâàÿ âêëàäêà 'ChangeLog'\n- Óáðàíà âñÿ ëèøíÿÿ èíôîðìàöèÿ ñ îñíîâíîãî ìåíþ." },
-    { version = "2.7", description = "- Èçìåíåí öâåò ñîîáùåíèé ñêðèïòà.\n- Óáðàí ëèøíèé ñïàì ïðè ñâîðà÷èâàíèè èãðû.\n- Èñïðàâëåí áàã â èíôîðìàöèè âåðñèè 2.6.\n- Äîáàâëåíà íîâàÿ èíôîðìàöèÿ â îêíî èíôîðìàöèè\n- Èçìåíåíà ëîãèêà ñâîðà÷èâàíèÿ èãðû." },
-    { version = "2.8", description = "- Äîáàâëåí íîâûé öâåò ìåíþ.\n- Ïåðåèìåíîâàíà âêëàäêà 'Ãëàâíàÿ'.\nòåïåðü îíà íàçûâàåòñÿ ôëóäåð.\n- Äîáàâëåíà ôóíêöèÿ îòêëþ÷èòü íå ôëóäè(ñåé÷àñ íåòó ðåïîðòà).\n- Ìåëêèå èñïðàâëåíèÿ." },
-    { version = "3.0", description = "- Ïîëçóíêè òåïåðü íàñòðàèâàþòñÿ!!.\n- Èçìåíåí êîä ìåíþ ôëóäåðà è íàñòðîåê.\n- Èñïðàâëåíî ïåðåìåùåíèå îêíà èíôîðìàöèè.\n- Çàìåíåíà êëàâèøà ïðèêðåïëåíèÿ îêíà íà ïðîáåë.\n- Âåðñèÿ 2.9 è 3.0 îáúåäèíåíû îïèñàíèåì" },
-    { version = "3.1 | Lite", description = "- Íîâàÿ òåìà - 'Ñâåòëàÿ'.\n- Ïîëíîñòüþ ïåðåïèñàíà ëîãèêà ÷àòà.\n- Áûëî äîáàâëåíî íåìíîãî èíôîðìàöèè âî âêëàäêè.\n- Äîáàâëåíû èêîíêè â ìåíþ (fontAwesome6).\n- Äîáàâëåíû íîâûå èíäèêàòîðû ñîîáùåíèé\n 'Èíôîðìàöèÿ' è 'RepFlow'.\n- Ïåðåïèñàí êîä íåêîòîðûõ ôóíêöèé.\n- Ðàçäåëåíèå ñêðèïòà íà Lite è Premium âåðñèþ.\n- Óëó÷øåíà îïòèìèçàöèÿ ñêðèïòà.\n- Ìåëêèå èñïðàâëåíèÿ. " },
+    { version = "2.6", description = "- Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¾ Ð¾ÐºÐ½Ð¾ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸.\n- Ð˜ÑÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½ Ð±Ð°Ð³ Ñ Ð¼Ð°ÑÑÐ¾Ð²Ñ‹Ð¼ ÑÐ¿Ð°Ð¼Ð¾Ð¼ Ð¿Ñ€Ð¸ ÑÐ²Ð¾Ñ€Ð°Ñ‡Ð¸Ð²Ð°Ð½Ð¸Ð¸ Ð¸Ð³Ñ€Ñ‹.\n- Ð˜ÑÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½ Ð±Ð°Ð³ Ñ ÐºÑ€Ð°ÑˆÐµÐ¼ Ð¸Ð³Ñ€Ñ‹ Ð¿Ñ€Ð¸ Ð¾ÐºÐ½Ðµ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸.\n- Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð° Ð½Ð¾Ð²Ð°Ñ Ð²ÐºÐ»Ð°Ð´ÐºÐ° 'ChangeLog'\n- Ð£Ð±Ñ€Ð°Ð½Ð° Ð²ÑÑ Ð»Ð¸ÑˆÐ½ÑÑ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ Ñ Ð¾ÑÐ½Ð¾Ð²Ð½Ð¾Ð³Ð¾ Ð¼ÐµÐ½ÑŽ." },
+    { version = "2.7", description = "- Ð˜Ð·Ð¼ÐµÐ½ÐµÐ½ Ñ†Ð²ÐµÑ‚ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ð¹ ÑÐºÑ€Ð¸Ð¿Ñ‚Ð°.\n- Ð£Ð±Ñ€Ð°Ð½ Ð»Ð¸ÑˆÐ½Ð¸Ð¹ ÑÐ¿Ð°Ð¼ Ð¿Ñ€Ð¸ ÑÐ²Ð¾Ñ€Ð°Ñ‡Ð¸Ð²Ð°Ð½Ð¸Ð¸ Ð¸Ð³Ñ€Ñ‹.\n- Ð˜ÑÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½ Ð±Ð°Ð³ Ð² Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ð²ÐµÑ€ÑÐ¸Ð¸ 2.6.\n- Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð° Ð½Ð¾Ð²Ð°Ñ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ Ð² Ð¾ÐºÐ½Ð¾ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸\n- Ð˜Ð·Ð¼ÐµÐ½ÐµÐ½Ð° Ð»Ð¾Ð³Ð¸ÐºÐ° ÑÐ²Ð¾Ñ€Ð°Ñ‡Ð¸Ð²Ð°Ð½Ð¸Ñ Ð¸Ð³Ñ€Ñ‹." },
+    { version = "2.8", description = "- Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½ Ð½Ð¾Ð²Ñ‹Ð¹ Ñ†Ð²ÐµÑ‚ Ð¼ÐµÐ½ÑŽ.\n- ÐŸÐµÑ€ÐµÐ¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½Ð° Ð²ÐºÐ»Ð°Ð´ÐºÐ° 'Ð“Ð»Ð°Ð²Ð½Ð°Ñ'.\nÑ‚ÐµÐ¿ÐµÑ€ÑŒ Ð¾Ð½Ð° Ð½Ð°Ð·Ñ‹Ð²Ð°ÐµÑ‚ÑÑ Ñ„Ð»ÑƒÐ´ÐµÑ€.\n- Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð° Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ Ð½Ðµ Ñ„Ð»ÑƒÐ´Ð¸(ÑÐµÐ¹Ñ‡Ð°Ñ Ð½ÐµÑ‚Ñƒ Ñ€ÐµÐ¿Ð¾Ñ€Ñ‚Ð°).\n- ÐœÐµÐ»ÐºÐ¸Ðµ Ð¸ÑÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ." },
+    { version = "3.0", description = "- ÐŸÐ¾Ð»Ð·ÑƒÐ½ÐºÐ¸ Ñ‚ÐµÐ¿ÐµÑ€ÑŒ Ð½Ð°ÑÑ‚Ñ€Ð°Ð¸Ð²Ð°ÑŽÑ‚ÑÑ!!.\n- Ð˜Ð·Ð¼ÐµÐ½ÐµÐ½ ÐºÐ¾Ð´ Ð¼ÐµÐ½ÑŽ Ñ„Ð»ÑƒÐ´ÐµÑ€Ð° Ð¸ Ð½Ð°ÑÑ‚Ñ€Ð¾ÐµÐº.\n- Ð˜ÑÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¾ Ð¿ÐµÑ€ÐµÐ¼ÐµÑ‰ÐµÐ½Ð¸Ðµ Ð¾ÐºÐ½Ð° Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸.\n- Ð—Ð°Ð¼ÐµÐ½ÐµÐ½Ð° ÐºÐ»Ð°Ð²Ð¸ÑˆÐ° Ð¿Ñ€Ð¸ÐºÑ€ÐµÐ¿Ð»ÐµÐ½Ð¸Ñ Ð¾ÐºÐ½Ð° Ð½Ð° Ð¿Ñ€Ð¾Ð±ÐµÐ».\n- Ð’ÐµÑ€ÑÐ¸Ñ 2.9 Ð¸ 3.0 Ð¾Ð±ÑŠÐµÐ´Ð¸Ð½ÐµÐ½Ñ‹ Ð¾Ð¿Ð¸ÑÐ°Ð½Ð¸ÐµÐ¼" },
+    { version = "3.1 | Lite", description = "- ÐÐ¾Ð²Ð°Ñ Ñ‚ÐµÐ¼Ð° - 'Ð¡Ð²ÐµÑ‚Ð»Ð°Ñ'.\n- ÐŸÐ¾Ð»Ð½Ð¾ÑÑ‚ÑŒÑŽ Ð¿ÐµÑ€ÐµÐ¿Ð¸ÑÐ°Ð½Ð° Ð»Ð¾Ð³Ð¸ÐºÐ° Ñ‡Ð°Ñ‚Ð°.\n- Ð‘Ñ‹Ð»Ð¾ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¾ Ð½ÐµÐ¼Ð½Ð¾Ð³Ð¾ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ð²Ð¾ Ð²ÐºÐ»Ð°Ð´ÐºÐ¸.\n- Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ñ‹ Ð¸ÐºÐ¾Ð½ÐºÐ¸ Ð² Ð¼ÐµÐ½ÑŽ (fontAwesome6).\n- Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ñ‹ Ð½Ð¾Ð²Ñ‹Ðµ Ð¸Ð½Ð´Ð¸ÐºÐ°Ñ‚Ð¾Ñ€Ñ‹ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ð¹\n 'Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ' Ð¸ 'RepFlow'.\n- ÐŸÐµÑ€ÐµÐ¿Ð¸ÑÐ°Ð½ ÐºÐ¾Ð´ Ð½ÐµÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ñ… Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¹.\n- Ð Ð°Ð·Ð´ÐµÐ»ÐµÐ½Ð¸Ðµ ÑÐºÑ€Ð¸Ð¿Ñ‚Ð° Ð½Ð° Lite Ð¸ Premium Ð²ÐµÑ€ÑÐ¸ÑŽ.\n- Ð£Ð»ÑƒÑ‡ÑˆÐµÐ½Ð° Ð¾Ð¿Ñ‚Ð¸Ð¼Ð¸Ð·Ð°Ñ†Ð¸Ñ ÑÐºÑ€Ð¸Ð¿Ñ‚Ð°.\n- ÐœÐµÐ»ÐºÐ¸Ðµ Ð¸ÑÐ¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ. " },
 }
 
-local keyBind = 0x5A -- êëàâèøà àêòèâàöèè: Z (ïî óìîë÷àíèþ)
-local keyBindName = 'Z' -- Íàçâàíèå êëàâèøè àêòèâàöèè
+local keyBind = 0x5A -- ÐºÐ»Ð°Ð²Ð¸ÑˆÐ° Ð°ÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ð¸: Z (Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ)
+local keyBindName = 'Z' -- ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ ÐºÐ»Ð°Ð²Ð¸ÑˆÐ¸ Ð°ÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ð¸
 
 local lastDialogId = nil
 local reportActive = false
 
-local lastOtTime = 0 -- Âðåìÿ ïîñëåäíåé îòïðàâêè /ot â ñåêóíäàõ
+local lastOtTime = 0 -- Ð’Ñ€ÐµÐ¼Ñ Ð¿Ð¾ÑÐ»ÐµÐ´Ð½ÐµÐ¹ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²ÐºÐ¸ /ot Ð² ÑÐµÐºÑƒÐ½Ð´Ð°Ñ…
 local active = false
-local otInterval = new.int(10) -- Èíòåðâàë äëÿ àâòîìàòè÷åñêîé îòïðàâêè /ot
+local otInterval = new.int(10) -- Ð˜Ð½Ñ‚ÐµÑ€Ð²Ð°Ð» Ð´Ð»Ñ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¾Ð¹ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²ÐºÐ¸ /ot
 local dialogTimeout = new.int(600)
-local otIntervalBuffer = imgui.new.char[5](tostring(otInterval[0])) -- Áóôåð íà 5 ñèìâîëîâ (çíà÷åíèÿ äî 9999)
-local useMilliseconds = new.bool(false) -- Ôëàã äëÿ èñïîëüçîâàíèÿ ìèëëèñåêóíä
-local infoWindowVisible = false -- Ôëàã äëÿ îòîáðàæåíèÿ îêíà èíôîðìàöèè
-local reportAnsweredCount = 0 -- Ñ÷åò÷èê äëÿ äèàëîãà 1334
-local cursorVisible = false -- Äëÿ îòñëåæèâàíèÿ âèäèìîñòè êóðñîðà
+local otIntervalBuffer = imgui.new.char[5](tostring(otInterval[0])) -- Ð‘ÑƒÑ„ÐµÑ€ Ð½Ð° 5 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð² (Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ Ð´Ð¾ 9999)
+local useMilliseconds = new.bool(false) -- Ð¤Ð»Ð°Ð³ Ð´Ð»Ñ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½Ð¸Ñ Ð¼Ð¸Ð»Ð»Ð¸ÑÐµÐºÑƒÐ½Ð´
+local infoWindowVisible = false -- Ð¤Ð»Ð°Ð³ Ð´Ð»Ñ Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ñ Ð¾ÐºÐ½Ð° Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸
+local reportAnsweredCount = 0 -- Ð¡Ñ‡ÐµÑ‚Ñ‡Ð¸Ðº Ð´Ð»Ñ Ð´Ð¸Ð°Ð»Ð¾Ð³Ð° 1334
+local cursorVisible = false -- Ð”Ð»Ñ Ð¾Ñ‚ÑÐ»ÐµÐ¶Ð¸Ð²Ð°Ð½Ð¸Ñ Ð²Ð¸Ð´Ð¸Ð¼Ð¾ÑÑ‚Ð¸ ÐºÑƒÑ€ÑÐ¾Ñ€Ð°
 
 local main_window_state = new.bool(false)
 local info_window_state = new.bool(false)
 local active_tab = new.int(0)
 local sw, sh = getScreenResolution()
-local colorCode = imgui.new.char[8](colorCode or "{1E90FF}") -- Çíà÷åíèå ïî óìîë÷àíèþ
-local tag = colorCode[0] .. "[RepFlow]: {FFFFFF}"
-local taginf = colorCode[0] .. "[Èíôîðìàöèÿ]: {FFFFFF}"
+local colorCode = imgui.new.char[9]("{1E90FF}")
+local tag = ffi.string(colorCode) .. "[RepFlow]: {FFFFFF}"
+local taginf = ffi.string(colorCode) .. "[Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ]: {FFFFFF}"
 
-local startTime = 0 -- Âðåìÿ ñòàðòà àâòîëîâëè
-local gameMinimized = false  -- Ôëàã äëÿ îòñëåæèâàíèÿ ñâîðà÷èâàíèÿ èãðû
+local startTime = 0 -- Ð’Ñ€ÐµÐ¼Ñ ÑÑ‚Ð°Ñ€Ñ‚Ð° Ð°Ð²Ñ‚Ð¾Ð»Ð¾Ð²Ð»Ð¸
+local gameMinimized = false  -- Ð¤Ð»Ð°Ð³ Ð´Ð»Ñ Ð¾Ñ‚ÑÐ»ÐµÐ¶Ð¸Ð²Ð°Ð½Ð¸Ñ ÑÐ²Ð¾Ñ€Ð°Ñ‡Ð¸Ð²Ð°Ð½Ð¸Ñ Ð¸Ð³Ñ€Ñ‹
 local wasActiveBeforePause = false
-local afkExitTime = 0  -- Âðåìÿ âûõîäà èç AFK
-local afkCooldown = 30  -- Çàäåðæêà â ñåêóíäàõ ïåðåä íà÷àëîì ëîâëè ïîñëå âûõîäà èç AFK
+local afkExitTime = 0  -- Ð’Ñ€ÐµÐ¼Ñ Ð²Ñ‹Ñ…Ð¾Ð´Ð° Ð¸Ð· AFK
+local afkCooldown = 30  -- Ð—Ð°Ð´ÐµÑ€Ð¶ÐºÐ° Ð² ÑÐµÐºÑƒÐ½Ð´Ð°Ñ… Ð¿ÐµÑ€ÐµÐ´ Ð½Ð°Ñ‡Ð°Ð»Ð¾Ð¼ Ð»Ð¾Ð²Ð»Ð¸ Ð¿Ð¾ÑÐ»Ðµ Ð²Ñ‹Ñ…Ð¾Ð´Ð° Ð¸Ð· AFK
 
-local disableAutoStartOnToggle = false -- Ôëàã äëÿ îòêëþ÷åíèÿ àâòîñòàðòà ïðè ðó÷íîì îòêëþ÷åíèè ëîâëè
+local disableAutoStartOnToggle = false -- Ð¤Ð»Ð°Ð³ Ð´Ð»Ñ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ Ð°Ð²Ñ‚Ð¾ÑÑ‚Ð°Ñ€Ñ‚Ð° Ð¿Ñ€Ð¸ Ñ€ÑƒÑ‡Ð½Ð¾Ð¼ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ð¸ Ð»Ð¾Ð²Ð»Ð¸
 
-local changingKey = false -- Ôëàã äëÿ îòñëåæèâàíèÿ ñìåíû ãëàâíîé êëàâèøè
+local changingKey = false -- Ð¤Ð»Ð°Ð³ Ð´Ð»Ñ Ð¾Ñ‚ÑÐ»ÐµÐ¶Ð¸Ð²Ð°Ð½Ð¸Ñ ÑÐ¼ÐµÐ½Ñ‹ Ð³Ð»Ð°Ð²Ð½Ð¾Ð¹ ÐºÐ»Ð°Ð²Ð¸ÑˆÐ¸
 
 encoding.default = 'CP1251'
 u8 = encoding.UTF8
@@ -59,19 +59,19 @@ local dialogHandlerEnabled = true
 local autoStartEnabled = true
 local hideFloodMsg = new.bool(true)
 
---------- Àêòèâ è âñå, ÷òî ñ íèì ñâÿçàíî
+--------- ÐÐºÑ‚Ð¸Ð² Ð¸ Ð²ÑÐµ, Ñ‡Ñ‚Ð¾ Ñ Ð½Ð¸Ð¼ ÑÐ²ÑÐ·Ð°Ð½Ð¾
 local lastDialogTime = os.clock()
-local dialogTimeoutBuffer = imgui.new.char[5](tostring(dialogTimeout[0])) -- Áóôåð íà 5 ñèìâîëîâ (çíà÷åíèÿ äî 9999)
+local dialogTimeoutBuffer = imgui.new.char[5](tostring(dialogTimeout[0])) -- Ð‘ÑƒÑ„ÐµÑ€ Ð½Ð° 5 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð² (Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ Ð´Ð¾ 9999)
 local manualDisable = false
 local autoStartEnabled = new.bool(true)
 local dialogHandlerEnabled = new.bool(true)
 ----------------------------------------
 
-local colorList = {u8'Êðàñíàÿ', u8'Çåë¸íàÿ', u8'Ñèíÿÿ', u8'Îðàíæåâàÿ', u8'Ñåðàÿ', u8'Ñâåòëàÿ'}
+local colorList = {u8'ÐšÑ€Ð°ÑÐ½Ð°Ñ', u8'Ð—ÐµÐ»Ñ‘Ð½Ð°Ñ', u8'Ð¡Ð¸Ð½ÑÑ', u8'ÐžÑ€Ð°Ð½Ð¶ÐµÐ²Ð°Ñ', u8'Ð¡ÐµÑ€Ð°Ñ', u8'Ð¡Ð²ÐµÑ‚Ð»Ð°Ñ'}
 local colorListNumber = new.int(0)
 local colorListBuffer = new['const char*'][#colorList](colorList)
 
--- Çàãðóçêà êîíôèãóðàöèè
+-- Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ð¸
 local ini = inicfg.load({
     main = {
         keyBind = string.format("0x%X", keyBind),
@@ -92,7 +92,16 @@ local ini = inicfg.load({
 }, IniFilename)
 local MoveWidget = false
 
--- Ïðèìåíåíèå çàãðóæåííîé êîíôèãóðàöèè
+-- Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð´Ð»Ñ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ¸ colorCode Ð¸Ð· ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ð¸
+local function loadColorCode()
+    local savedColor = ini.main.colorCode or "{1E90FF}" -- Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð½Ð¾Ð³Ð¾ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ
+    savedColor = savedColor:sub(1, 8) -- ÐžÐ±Ñ€ÐµÐ·Ð°ÐµÐ¼ ÑÑ‚Ñ€Ð¾ÐºÑƒ Ð´Ð¾ 7 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð², ÐµÑÐ»Ð¸ Ð¾Ð½Ð° Ð´Ð»Ð¸Ð½Ð½ÐµÐµ
+    for i = 1, #savedColor do
+        colorCode[i - 1] = savedColor:sub(i, i):byte() -- ÐšÐ¾Ð¿Ð¸Ñ€ÑƒÐµÐ¼ ÐºÐ°Ð¶Ð´Ñ‹Ð¹ ÑÐ¸Ð¼Ð²Ð¾Ð» Ð² colorCode ÐºÐ°Ðº Ð±Ð°Ð¹Ñ‚
+    end
+end
+
+-- ÐŸÑ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½Ð½Ð¾Ð¹ ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ð¸
 keyBind = tonumber(ini.main.keyBind)
 keyBindName = ini.main.keyBindName
 otInterval[0] = tonumber(ini.main.otInterval)
@@ -102,7 +111,8 @@ dialogTimeout[0] = tonumber(ini.main.dialogTimeout)
 dialogHandlerEnabled[0] = ini.main.dialogHandlerEnabled
 autoStartEnabled[0] = ini.main.autoStartEnabled or false
 hideFloodMsg[0] = ini.main.otklflud
-colorCode = ini.main.colorCode
+savedColor = ini.main.colorCode
+loadColorCode()
 
 local themes = {
     {
@@ -403,48 +413,48 @@ function main()
     while not isSampAvailable() do wait(100) end
     sampRegisterChatCommand("arep", cmd_arep)
 
-    sampAddChatMessage(tag .. 'Ñêðèïò {00FF00}çàãðóæåí.{FFFFFF} Àêòèâàöèÿ ìåíþ: {00FF00}/arep', -1)
+    sampAddChatMessage(tag .. 'Ð¡ÐºÑ€Ð¸Ð¿Ñ‚ {00FF00}Ð·Ð°Ð³Ñ€ÑƒÐ¶ÐµÐ½.{FFFFFF} ÐÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ñ Ð¼ÐµÐ½ÑŽ: {00FF00}/arep', -1)
 
-    show_arz_notify('success', 'RepFlow', 'Óñïåøíàÿ çàãðóçêà. Àêòèâàöèÿ: /arep', 9000)
+    show_arz_notify('success', 'RepFlow', 'Ð£ÑÐ¿ÐµÑˆÐ½Ð°Ñ Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ°. ÐÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ñ: /arep', 9000)
 
     while true do
         wait(0)
 
-        checkPauseAndDisableAutoStart() -- Ïðîâåðÿåì ñâîðà÷èâàíèå èãðû
-        checkAutoStart() -- Âûïîëíÿåòñÿ ñ çàäåðæêîé, åñëè èãðà íå ñâåðíóòà
+        checkPauseAndDisableAutoStart() -- ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ ÑÐ²Ð¾Ñ€Ð°Ñ‡Ð¸Ð²Ð°Ð½Ð¸Ðµ Ð¸Ð³Ñ€Ñ‹
+        checkAutoStart() -- Ð’Ñ‹Ð¿Ð¾Ð»Ð½ÑÐµÑ‚ÑÑ Ñ Ð·Ð°Ð´ÐµÑ€Ð¶ÐºÐ¾Ð¹, ÐµÑÐ»Ð¸ Ð¸Ð³Ñ€Ð° Ð½Ðµ ÑÐ²ÐµÑ€Ð½ÑƒÑ‚Ð°
         --checkTelegramUpdates()
         imgui.Process = main_window_state[0] and not isGameMinimized
 
-        -- Ëîãèêà ïåðåìåùåíèÿ îêíà
+        -- Ð›Ð¾Ð³Ð¸ÐºÐ° Ð¿ÐµÑ€ÐµÐ¼ÐµÑ‰ÐµÐ½Ð¸Ñ Ð¾ÐºÐ½Ð°
         if MoveWidget then
             ini.widget.posX, ini.widget.posY = getCursorPos()
             local cursorX, cursorY = getCursorPos()
             ini.widget.posX = cursorX
             ini.widget.posY = cursorY
-            if isKeyJustPressed(0x20) then -- Ïðîáåë äëÿ ôèêñàöèè ïîçèöèè
+            if isKeyJustPressed(0x20) then -- ÐŸÑ€Ð¾Ð±ÐµÐ» Ð´Ð»Ñ Ñ„Ð¸ÐºÑÐ°Ñ†Ð¸Ð¸ Ð¿Ð¾Ð·Ð¸Ñ†Ð¸Ð¸
                 MoveWidget = false
                 sampToggleCursor(false)
                 saveWindowSettings()
             end
         end
 
-        -- Ëîãèêà îòîáðàæåíèÿ îêíà èíôîðìàöèè
+        -- Ð›Ð¾Ð³Ð¸ÐºÐ° Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ñ Ð¾ÐºÐ½Ð° Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸
         if active or MoveWidget then
-            showInfoWindow() -- Ïîêàçûâàåì îêíî èíôîðìàöèè òîëüêî åñëè ëîâëÿ àêòèâíà èëè èäåò ïåðåìåùåíèå
+            showInfoWindow() -- ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ Ð¾ÐºÐ½Ð¾ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ ÐµÑÐ»Ð¸ Ð»Ð¾Ð²Ð»Ñ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð° Ð¸Ð»Ð¸ Ð¸Ð´ÐµÑ‚ Ð¿ÐµÑ€ÐµÐ¼ÐµÑ‰ÐµÐ½Ð¸Ðµ
         else
-            showInfoWindowOff() -- Ñêðûâàåì îêíî, åñëè íè îäíî óñëîâèå íå âûïîëíåíî
+            showInfoWindowOff() -- Ð¡ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð¾ÐºÐ½Ð¾, ÐµÑÐ»Ð¸ Ð½Ð¸ Ð¾Ð´Ð½Ð¾ ÑƒÑÐ»Ð¾Ð²Ð¸Ðµ Ð½Ðµ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¾
         end
 
-        -- Ëîâëÿ àêòèâèðóåòñÿ ïî êëàâèøå
+        -- Ð›Ð¾Ð²Ð»Ñ Ð°ÐºÑ‚Ð¸Ð²Ð¸Ñ€ÑƒÐµÑ‚ÑÑ Ð¿Ð¾ ÐºÐ»Ð°Ð²Ð¸ÑˆÐµ
         if not changingKey and isKeyJustPressed(keyBind) and not isSampfuncsConsoleActive() and not sampIsChatInputActive() and not sampIsDialogActive() and not isPauseMenuActive() then
             onToggleActive()
         end
 
-        -- Åñëè àâòîëîâëÿ àêòèâíà
+        -- Ð•ÑÐ»Ð¸ Ð°Ð²Ñ‚Ð¾Ð»Ð¾Ð²Ð»Ñ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð°
         if active then
-            local currentTime = os.clock() * 1000 -- Òåêóùåå âðåìÿ â ìèëëèñåêóíäàõ
+            local currentTime = os.clock() * 1000 -- Ð¢ÐµÐºÑƒÑ‰ÐµÐµ Ð²Ñ€ÐµÐ¼Ñ Ð² Ð¼Ð¸Ð»Ð»Ð¸ÑÐµÐºÑƒÐ½Ð´Ð°Ñ…
 
-            -- Ëîâëÿ ðåïîðòîâ
+            -- Ð›Ð¾Ð²Ð»Ñ Ñ€ÐµÐ¿Ð¾Ñ€Ñ‚Ð¾Ð²
             if useMilliseconds[0] then
                 if currentTime - lastOtTime >= otInterval[0] then
                     sampSendChat('/ot')
@@ -457,17 +467,17 @@ function main()
                 end
             end
         else
-            -- Åñëè àâòîëîâëÿ íåàêòèâíà, ñáðàñûâàåì òàéìåðû
-            startTime = os.clock() -- Ñáðàñûâàåì è ôèêñèðóåì âðåìÿ íà÷àëà àâòîëîâëè
-            attemptCount = 0 -- Ñáðàñûâàåì êîëè÷åñòâî ïîïûòîê
+            -- Ð•ÑÐ»Ð¸ Ð°Ð²Ñ‚Ð¾Ð»Ð¾Ð²Ð»Ñ Ð½ÐµÐ°ÐºÑ‚Ð¸Ð²Ð½Ð°, ÑÐ±Ñ€Ð°ÑÑ‹Ð²Ð°ÐµÐ¼ Ñ‚Ð°Ð¹Ð¼ÐµÑ€Ñ‹
+            startTime = os.clock() -- Ð¡Ð±Ñ€Ð°ÑÑ‹Ð²Ð°ÐµÐ¼ Ð¸ Ñ„Ð¸ÐºÑÐ¸Ñ€ÑƒÐµÐ¼ Ð²Ñ€ÐµÐ¼Ñ Ð½Ð°Ñ‡Ð°Ð»Ð° Ð°Ð²Ñ‚Ð¾Ð»Ð¾Ð²Ð»Ð¸
+            attemptCount = 0 -- Ð¡Ð±Ñ€Ð°ÑÑ‹Ð²Ð°ÐµÐ¼ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¿Ð¾Ð¿Ñ‹Ñ‚Ð¾Ðº
         end
     end
 end
 
--- Ôóíêöèÿ äëÿ îáíîâëåíèÿ òåãîâ
+-- Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð´Ð»Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ñ‚ÐµÐ³Ð¾Ð² Ñ Ð½Ð¾Ð²Ñ‹Ð¼ Ñ†Ð²ÐµÑ‚Ð¾Ð²Ñ‹Ð¼ ÐºÐ¾Ð´Ð¾Ð¼
 local function updateTags()
-    tag = colorCode[0] .. "[RepFlow]: {FFFFFF}"
-    taginf = colorCode[0] .. "[Èíôîðìàöèÿ]: {FFFFFF}"
+    tag = ffi.string(colorCode) .. "[RepFlow]: {FFFFFF}"
+    taginf = ffi.string(colorCode) .. "[Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ]: {FFFFFF}"
 end
 
 function resetIO()
@@ -484,11 +494,11 @@ function resetIO()
 end
 
 function startMovingWindow()
-    MoveWidget = true -- Âêëþ÷àåì ðåæèì ïåðåìåùåíèÿ
-    showInfoWindow() -- Ïîêàçûâàåì îêíî èíôîðìàöèè, ÷òîáû ïîëüçîâàòåëü ìîã åãî ïåðåìåùàòü
-    sampToggleCursor(true) -- Ïîêàçûâàåì êóðñîð
-    main_window_state[0] = false -- Çàêðûâàåì îñíîâíîå îêíî
-    sampAddChatMessage(taginf .. '{FFFF00}Ðåæèì ïåðåìåùåíèÿ îêíà àêòèâèðîâàí. Íàæìèòå "Ïðîáåë" äëÿ ïîäòâåðæäåíèÿ.', -1)
+    MoveWidget = true -- Ð’ÐºÐ»ÑŽÑ‡Ð°ÐµÐ¼ Ñ€ÐµÐ¶Ð¸Ð¼ Ð¿ÐµÑ€ÐµÐ¼ÐµÑ‰ÐµÐ½Ð¸Ñ
+    showInfoWindow() -- ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ Ð¾ÐºÐ½Ð¾ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ Ð¼Ð¾Ð³ ÐµÐ³Ð¾ Ð¿ÐµÑ€ÐµÐ¼ÐµÑ‰Ð°Ñ‚ÑŒ
+    sampToggleCursor(true) -- ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ ÐºÑƒÑ€ÑÐ¾Ñ€
+    main_window_state[0] = false -- Ð—Ð°ÐºÑ€Ñ‹Ð²Ð°ÐµÐ¼ Ð¾ÑÐ½Ð¾Ð²Ð½Ð¾Ðµ Ð¾ÐºÐ½Ð¾
+    sampAddChatMessage(taginf .. '{FFFF00}Ð ÐµÐ¶Ð¸Ð¼ Ð¿ÐµÑ€ÐµÐ¼ÐµÑ‰ÐµÐ½Ð¸Ñ Ð¾ÐºÐ½Ð° Ð°ÐºÑ‚Ð¸Ð²Ð¸Ñ€Ð¾Ð²Ð°Ð½. ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ "ÐŸÑ€Ð¾Ð±ÐµÐ»" Ð´Ð»Ñ Ð¿Ð¾Ð´Ñ‚Ð²ÐµÑ€Ð¶Ð´ÐµÐ½Ð¸Ñ.', -1)
 end
 
 imgui.OnInitialize(function()
@@ -497,15 +507,15 @@ imgui.OnInitialize(function()
     config.MergeMode = true
     config.PixelSnapH = true
     iconRanges = imgui.new.ImWchar[3](faicons.min_range, faicons.max_range, 0)
-    imgui.GetIO().Fonts:AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85('solid'), 14, config, iconRanges) -- solid - òèï èêîíîê, òàê æå åñòü thin, regular, light è duotone
-	decor() -- ïðèìåíÿåì äåêîð ÷àñòü
-    themes[colorListNumber[0]+1].change() -- ïðèìåíÿåì öâåòîâóþ ÷àñòü
+    imgui.GetIO().Fonts:AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85('solid'), 14, config, iconRanges) -- solid - Ñ‚Ð¸Ð¿ Ð¸ÐºÐ¾Ð½Ð¾Ðº, Ñ‚Ð°Ðº Ð¶Ðµ ÐµÑÑ‚ÑŒ thin, regular, light Ð¸ duotone
+	decor() -- Ð¿Ñ€Ð¸Ð¼ÐµÐ½ÑÐµÐ¼ Ð´ÐµÐºÐ¾Ñ€ Ñ‡Ð°ÑÑ‚ÑŒ
+    themes[colorListNumber[0]+1].change() -- Ð¿Ñ€Ð¸Ð¼ÐµÐ½ÑÐµÐ¼ Ñ†Ð²ÐµÑ‚Ð¾Ð²ÑƒÑŽ Ñ‡Ð°ÑÑ‚ÑŒ
 end)
 
 local dialogHandlerEnabled = new.bool(ini.main.dialogHandlerEnabled)
 
 function decor()
-    -- == Äåêîð ÷àñòü == --
+    -- == Ð”ÐµÐºÐ¾Ñ€ Ñ‡Ð°ÑÑ‚ÑŒ == --
 	local ImVec4 = imgui.ImVec4
 	imgui.SwitchContext()
 	local style = imgui.GetStyle()
@@ -527,7 +537,7 @@ function decor()
 end
 
 function sampev.onServerMessage(color, text)
-    if text:find('%[(%W+)%] îò (%w+_%w+)%[(%d+)%]:') then
+    if text:find('%[(%W+)%] Ð¾Ñ‚ (%w+_%w+)%[(%d+)%]:') then
         if active then
             sampSendChat('/ot')
         end
@@ -537,30 +547,30 @@ end
 
 function onToggleActive()
     active = not active
-    manualDisable = not active  -- Óñòàíàâëèâàåì ôëàã äëÿ àâòîñòàðòà
-    disableAutoStartOnToggle = not active -- Åñëè ëîâëÿ îòêëþ÷åíà âðó÷íóþ, îòêëþ÷àåì àâòîñòàðò
+    manualDisable = not active  -- Ð£ÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÐ¼ Ñ„Ð»Ð°Ð³ Ð´Ð»Ñ Ð°Ð²Ñ‚Ð¾ÑÑ‚Ð°Ñ€Ñ‚Ð°
+    disableAutoStartOnToggle = not active -- Ð•ÑÐ»Ð¸ Ð»Ð¾Ð²Ð»Ñ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡ÐµÐ½Ð° Ð²Ñ€ÑƒÑ‡Ð½ÑƒÑŽ, Ð¾Ñ‚ÐºÐ»ÑŽÑ‡Ð°ÐµÐ¼ Ð°Ð²Ñ‚Ð¾ÑÑ‚Ð°Ñ€Ñ‚
 
-    local status = active and '{00FF00}âêëþ÷åíà' or '{FF0000}âûêëþ÷åíà'
-    local statusArz = active and 'âêëþ÷åíà' or 'âûêëþ÷åíà'
+    local status = active and '{00FF00}Ð²ÐºÐ»ÑŽÑ‡ÐµÐ½Ð°' or '{FF0000}Ð²Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½Ð°'
+    local statusArz = active and 'Ð²ÐºÐ»ÑŽÑ‡ÐµÐ½Ð°' or 'Ð²Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½Ð°'
 
-    show_arz_notify('info', 'RepFlow', 'Ëîâëÿ ' .. statusArz .. '!', 2000)
+    show_arz_notify('info', 'RepFlow', 'Ð›Ð¾Ð²Ð»Ñ ' .. statusArz .. '!', 2000)
 end
 
 function saveWindowSettings()
-    ini.widget.posX = ini.widget.posX or 400 -- Óñòàíàâëèâàåì çíà÷åíèå ïî óìîë÷àíèþ
-    ini.widget.posY = ini.widget.posY or 400 -- Óñòàíàâëèâàåì çíà÷åíèå ïî óìîë÷àíèþ
-    inicfg.save(ini, IniFilename) -- Ñîõðàíÿåì â INI-ôàéë
-    sampAddChatMessage(taginf .. '{00FF00}Ïîëîæåíèå îêíà ñîõðàíåíî!', -1)
+    ini.widget.posX = ini.widget.posX or 400 -- Ð£ÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÐ¼ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ
+    ini.widget.posY = ini.widget.posY or 400 -- Ð£ÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÐ¼ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ
+    inicfg.save(ini, IniFilename) -- Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼ Ð² INI-Ñ„Ð°Ð¹Ð»
+    sampAddChatMessage(taginf .. '{00FF00}ÐŸÐ¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð¾ÐºÐ½Ð° ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¾!', -1)
 end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
     if dialogId == 1334 then
-        lastDialogTime = os.clock() -- Ñáðîñ òàéìåðà ïðè ïîÿâëåíèè äèàëîãà
-        reportAnsweredCount = reportAnsweredCount + 1 -- Óâåëè÷èâàåì ñ÷åò÷èê
-        sampAddChatMessage(tag .. '{00FF00}Ðåïîðò ïðèíÿò! Îòâå÷åíî ðåïîðòà: ' .. reportAnsweredCount, -1)
+        lastDialogTime = os.clock() -- Ð¡Ð±Ñ€Ð¾Ñ Ñ‚Ð°Ð¹Ð¼ÐµÑ€Ð° Ð¿Ñ€Ð¸ Ð¿Ð¾ÑÐ²Ð»ÐµÐ½Ð¸Ð¸ Ð´Ð¸Ð°Ð»Ð¾Ð³Ð°
+        reportAnsweredCount = reportAnsweredCount + 1 -- Ð£Ð²ÐµÐ»Ð¸Ñ‡Ð¸Ð²Ð°ÐµÐ¼ ÑÑ‡ÐµÑ‚Ñ‡Ð¸Ðº
+        sampAddChatMessage(tag .. '{00FF00}Ð ÐµÐ¿Ð¾Ñ€Ñ‚ Ð¿Ñ€Ð¸Ð½ÑÑ‚! ÐžÑ‚Ð²ÐµÑ‡ÐµÐ½Ð¾ Ñ€ÐµÐ¿Ð¾Ñ€Ñ‚Ð°: ' .. reportAnsweredCount, -1)
         if active then
             active = false
-            show_arz_notify('info', 'RepFlow', 'Ëîâëÿ îòêëþ÷åíà èç-çà îêíà ðåïîðòà!', 3000)
+            show_arz_notify('info', 'RepFlow', 'Ð›Ð¾Ð²Ð»Ñ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡ÐµÐ½Ð° Ð¸Ð·-Ð·Ð° Ð¾ÐºÐ½Ð° Ñ€ÐµÐ¿Ð¾Ñ€Ñ‚Ð°!', 3000)
         end
     end
 end
@@ -568,12 +578,12 @@ end
 function checkAutoStart()
     local currentTime = os.clock()
     
-    -- Ïðîâåðÿåì, ÷òî ëîâëÿ íå àêòèâíà, èãðà íå ñâåðíóòà è ïðîøëî äîñòàòî÷íî âðåìåíè ñ âûõîäà èç AFK
+    -- ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼, Ñ‡Ñ‚Ð¾ Ð»Ð¾Ð²Ð»Ñ Ð½Ðµ Ð°ÐºÑ‚Ð¸Ð²Ð½Ð°, Ð¸Ð³Ñ€Ð° Ð½Ðµ ÑÐ²ÐµÑ€Ð½ÑƒÑ‚Ð° Ð¸ Ð¿Ñ€Ð¾ÑˆÐ»Ð¾ Ð´Ð¾ÑÑ‚Ð°Ñ‚Ð¾Ñ‡Ð½Ð¾ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ñ Ð²Ñ‹Ñ…Ð¾Ð´Ð° Ð¸Ð· AFK
     if autoStartEnabled[0] and not active and not gameMinimized and (afkExitTime == 0 or currentTime - afkExitTime >= afkCooldown) then
-        -- Åñëè îòêëþ÷åíèå àâòîñòàðòà íå áûëî àêòèâèðîâàíî âðó÷íóþ
+        -- Ð•ÑÐ»Ð¸ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ Ð°Ð²Ñ‚Ð¾ÑÑ‚Ð°Ñ€Ñ‚Ð° Ð½Ðµ Ð±Ñ‹Ð»Ð¾ Ð°ÐºÑ‚Ð¸Ð²Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¾ Ð²Ñ€ÑƒÑ‡Ð½ÑƒÑŽ
         if not disableAutoStartOnToggle and (currentTime - lastDialogTime) > dialogTimeout[0] then
             active = true
-            show_arz_notify('info', 'RepFlow', 'Ëîâëÿ âêëþ÷åíà ïî òàéìàóòó', 3000)
+            show_arz_notify('info', 'RepFlow', 'Ð›Ð¾Ð²Ð»Ñ Ð²ÐºÐ»ÑŽÑ‡ÐµÐ½Ð° Ð¿Ð¾ Ñ‚Ð°Ð¹Ð¼Ð°ÑƒÑ‚Ñƒ', 3000)
         end
     end
 end
@@ -601,41 +611,41 @@ function cmd_arep(arg)
 end
 
 function drawMainTab()
-    -- Îòîáðàæåíèå çàãîëîâêà
-    imgui.CenterText(u8"Íàñòðîéêè ôëóäåðà")
+    -- ÐžÑ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²ÐºÐ°
+    imgui.CenterText(u8"ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ñ„Ð»ÑƒÐ´ÐµÑ€Ð°")
     imgui.Separator()
 
     imgui.PushItemWidth(100)
 
-    -- ×åêáîêñ äëÿ èñïîëüçîâàíèÿ ìèëëèñåêóíä
-    if imgui.Checkbox(u8'Èñïîëüçîâàòü ìèëëèñåêóíäû', useMilliseconds) then
+    -- Ð§ÐµÐºÐ±Ð¾ÐºÑ Ð´Ð»Ñ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½Ð¸Ñ Ð¼Ð¸Ð»Ð»Ð¸ÑÐµÐºÑƒÐ½Ð´
+    if imgui.Checkbox(u8'Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ Ð¼Ð¸Ð»Ð»Ð¸ÑÐµÐºÑƒÐ½Ð´Ñ‹', useMilliseconds) then
         ini.main.useMilliseconds = useMilliseconds[0]
         inicfg.save(ini, IniFilename)
     end
 
     imgui.PopItemWidth()
 
-    -- Òåêñòîâîå ïîëå äëÿ èíòåðâàëà îòïðàâêè êîìàíäû /ot
-    imgui.Text(u8'Èíòåðâàë îòïðàâêè êîìàíäû /ot (' .. (useMilliseconds[0] and u8'â ìèëëèñåêóíäàõ' or u8'â ñåêóíäàõ') .. '):')
+    -- Ð¢ÐµÐºÑÑ‚Ð¾Ð²Ð¾Ðµ Ð¿Ð¾Ð»Ðµ Ð´Ð»Ñ Ð¸Ð½Ñ‚ÐµÑ€Ð²Ð°Ð»Ð° Ð¾Ñ‚Ð¿Ñ€Ð°Ð²ÐºÐ¸ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ‹ /ot
+    imgui.Text(u8'Ð˜Ð½Ñ‚ÐµÑ€Ð²Ð°Ð» Ð¾Ñ‚Ð¿Ñ€Ð°Ð²ÐºÐ¸ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñ‹ /ot (' .. (useMilliseconds[0] and u8'Ð² Ð¼Ð¸Ð»Ð»Ð¸ÑÐµÐºÑƒÐ½Ð´Ð°Ñ…' or u8'Ð² ÑÐµÐºÑƒÐ½Ð´Ð°Ñ…') .. '):')
 
-    -- Òåêóùåå çíà÷åíèå èíòåðâàëà
-    imgui.Text(u8'Òåêóùèé èíòåðâàë: ' .. otInterval[0] .. (useMilliseconds[0] and u8' ìñ' or u8' ñåêóíä'))
+    -- Ð¢ÐµÐºÑƒÑ‰ÐµÐµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð¸Ð½Ñ‚ÐµÑ€Ð²Ð°Ð»Ð°
+    imgui.Text(u8'Ð¢ÐµÐºÑƒÑ‰Ð¸Ð¹ Ð¸Ð½Ñ‚ÐµÑ€Ð²Ð°Ð»: ' .. otInterval[0] .. (useMilliseconds[0] and u8' Ð¼Ñ' or u8' ÑÐµÐºÑƒÐ½Ð´'))
 
     imgui.PushItemWidth(45)
 
-    -- Ïîëå äëÿ ââîäà èíòåðâàëà
+    -- ÐŸÐ¾Ð»Ðµ Ð´Ð»Ñ Ð²Ð²Ð¾Ð´Ð° Ð¸Ð½Ñ‚ÐµÑ€Ð²Ð°Ð»Ð°
     imgui.InputText(u8'##otIntervalInput', otIntervalBuffer, ffi.sizeof(otIntervalBuffer))
     imgui.SameLine()
-    -- Êíîïêà äëÿ ñîõðàíåíèÿ èíòåðâàëà
-    if imgui.Button(faicons('floppy_disk') .. u8" Ñîõðàíèòü èíòåðâàë") then
-        local newValue = tonumber(ffi.string(otIntervalBuffer)) -- Ïðåîáðàçóåì ñòðîêó â ÷èñëî
+    -- ÐšÐ½Ð¾Ð¿ÐºÐ° Ð´Ð»Ñ ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ñ Ð¸Ð½Ñ‚ÐµÑ€Ð²Ð°Ð»Ð°
+    if imgui.Button(faicons('floppy_disk') .. u8" Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ð¸Ð½Ñ‚ÐµÑ€Ð²Ð°Ð»") then
+        local newValue = tonumber(ffi.string(otIntervalBuffer)) -- ÐŸÑ€ÐµÐ¾Ð±Ñ€Ð°Ð·ÑƒÐµÐ¼ ÑÑ‚Ñ€Ð¾ÐºÑƒ Ð² Ñ‡Ð¸ÑÐ»Ð¾
         if newValue ~= nil then
-            otInterval[0] = newValue -- Îáíîâëÿåì çíà÷åíèå otInterval
-            ini.main.otInterval = otInterval[0] -- Ñîõðàíÿåì â êîíôèã
+            otInterval[0] = newValue -- ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ otInterval
+            ini.main.otInterval = otInterval[0] -- Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼ Ð² ÐºÐ¾Ð½Ñ„Ð¸Ð³
             inicfg.save(ini, IniFilename)
-            sampAddChatMessage(taginf .. "Èíòåðâàë ñîõðàí¸í: {32CD32}" .. newValue .. (useMilliseconds[0] and " ìñ" or " ñåêóíä"), -1)
+            sampAddChatMessage(taginf .. "Ð˜Ð½Ñ‚ÐµÑ€Ð²Ð°Ð» ÑÐ¾Ñ…Ñ€Ð°Ð½Ñ‘Ð½: {32CD32}" .. newValue .. (useMilliseconds[0] and " Ð¼Ñ" or " ÑÐµÐºÑƒÐ½Ð´"), -1)
         else
-            sampAddChatMessage(taginf .. "Íåêîððåêòíîå çíà÷åíèå. {32CD32}Ââåäèòå ÷èñëî.", -1)
+            sampAddChatMessage(taginf .. "ÐÐµÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ. {32CD32}Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ‡Ð¸ÑÐ»Ð¾.", -1)
         end
     end
 
@@ -643,27 +653,28 @@ function drawMainTab()
 
     imgui.Separator()
 
-    -- Èíôîðìàöèîííûå ñîîáùåíèÿ
-    imgui.Text(u8'Ñêðèïò òàêæå èùåò íàäïèñü â ÷àòå [Ðåïîðò] îò Èìÿ_Ôàìèëèÿ.')
-    imgui.Text(u8'Ôëóäåð íóæåí äëÿ äîïîëíèòåëüíîãî ñïîñîáà ëîâëè ðåïîðòà.')
+    -- Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ
+    imgui.Text(u8'Ð¡ÐºÑ€Ð¸Ð¿Ñ‚ Ñ‚Ð°ÐºÐ¶Ðµ Ð¸Ñ‰ÐµÑ‚ Ð½Ð°Ð´Ð¿Ð¸ÑÑŒ Ð² Ñ‡Ð°Ñ‚Ðµ [Ð ÐµÐ¿Ð¾Ñ€Ñ‚] Ð¾Ñ‚ Ð˜Ð¼Ñ_Ð¤Ð°Ð¼Ð¸Ð»Ð¸Ñ.')
+    imgui.Text(u8'Ð¤Ð»ÑƒÐ´ÐµÑ€ Ð½ÑƒÐ¶ÐµÐ½ Ð´Ð»Ñ Ð´Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ð³Ð¾ ÑÐ¿Ð¾ÑÐ¾Ð±Ð° Ð»Ð¾Ð²Ð»Ð¸ Ñ€ÐµÐ¿Ð¾Ñ€Ñ‚Ð°.')
 
     imgui.Separator()
 end
+
 function drawSettingsTab()
-    imgui.CenterText(u8'Íàñòðîéêè ëîâëè')
+    imgui.CenterText(u8'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð»Ð¾Ð²Ð»Ð¸')
     imgui.Separator()
-    imgui.Text(u8'Òåêóùàÿ êëàâèøà àêòèâàöèè:')
+    imgui.Text(u8'Ð¢ÐµÐºÑƒÑ‰Ð°Ñ ÐºÐ»Ð°Ð²Ð¸ÑˆÐ° Ð°ÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ð¸:')
     imgui.SameLine()
     if imgui.Button(u8'' .. keyBindName) then
         changingKey = true
-        show_arz_notify('info', 'RepFlow', 'Íàæìèòå íîâóþ êëàâèøó äëÿ àêòèâàöèè', 2000)
+        show_arz_notify('info', 'RepFlow', 'ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð½Ð¾Ð²ÑƒÑŽ ÐºÐ»Ð°Ð²Ð¸ÑˆÑƒ Ð´Ð»Ñ Ð°ÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ð¸', 2000)
     end
 
     imgui.Separator()
 
-    -- Âûáîð òåìû
-    imgui.Text(u8'Âûáåðèòå òåìó:')
-    if imgui.Combo(u8'Òåìû', colorListNumber, colorListBuffer, #colorList) then
+    -- Ð’Ñ‹Ð±Ð¾Ñ€ Ñ‚ÐµÐ¼Ñ‹
+    imgui.Text(u8'Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ñ‚ÐµÐ¼Ñƒ:')
+    if imgui.Combo(u8'Ð¢ÐµÐ¼Ñ‹', colorListNumber, colorListBuffer, #colorList) then
         themes[colorListNumber[0] + 1].change()
         ini.main.themes = colorListNumber[0]
         inicfg.save(ini, IniFilename)
@@ -671,141 +682,138 @@ function drawSettingsTab()
 
     imgui.Separator()
 
-    -- Îáðàáîòêà äèàëîãîâ
-    if imgui.Checkbox(u8'Îáðàáàòûâàòü äèàëîãè', dialogHandlerEnabled) then
+    -- ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ð´Ð¸Ð°Ð»Ð¾Ð³Ð¾Ð²
+    if imgui.Checkbox(u8'ÐžÐ±Ñ€Ð°Ð±Ð°Ñ‚Ñ‹Ð²Ð°Ñ‚ÑŒ Ð´Ð¸Ð°Ð»Ð¾Ð³Ð¸', dialogHandlerEnabled) then
         ini.main.dialogHandlerEnabled = dialogHandlerEnabled[0]
         inicfg.save(ini, IniFilename)
     end
 
-    -- Àâòîñòàðò
-    if imgui.Checkbox(u8'Àâòîñòàðò ëîâëè ïî áîëüøîìó àêòèâó', autoStartEnabled) then
+    -- ÐÐ²Ñ‚Ð¾ÑÑ‚Ð°Ñ€Ñ‚
+    if imgui.Checkbox(u8'ÐÐ²Ñ‚Ð¾ÑÑ‚Ð°Ñ€Ñ‚ Ð»Ð¾Ð²Ð»Ð¸ Ð¿Ð¾ Ð±Ð¾Ð»ÑŒÑˆÐ¾Ð¼Ñƒ Ð°ÐºÑ‚Ð¸Ð²Ñƒ', autoStartEnabled) then
         ini.main.autoStartEnabled = autoStartEnabled[0]
         inicfg.save(ini, IniFilename)
     end
 
-    -- Îòêëþ÷åíèå ñîîáùåíèÿ "Íå ôëóäè"
-    if imgui.Checkbox(u8'Îòêëþ÷èòü ñîîáùåíèå "Íå ôëóäè"', hideFloodMsg) then
+    -- ÐžÑ‚ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ "ÐÐµ Ñ„Ð»ÑƒÐ´Ð¸"
+    if imgui.Checkbox(u8'ÐžÑ‚ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ "ÐÐµ Ñ„Ð»ÑƒÐ´Ð¸"', hideFloodMsg) then
         ini.main.otklflud = hideFloodMsg[0]
         inicfg.save(ini, IniFilename)
     end
 
     imgui.Separator()
 
-    -- Ïîëå äëÿ ââîäà òàéì-àóòà àâòîñòàðòà
+    -- ÐŸÐ¾Ð»Ðµ Ð´Ð»Ñ Ð²Ð²Ð¾Ð´Ð° Ñ‚Ð°Ð¹Ð¼-Ð°ÑƒÑ‚Ð° Ð°Ð²Ñ‚Ð¾ÑÑ‚Ð°Ñ€Ñ‚Ð°
     imgui.PushItemWidth(45)
-    imgui.Text(u8'Òàéì-àóò äëÿ àâòîñòàðòà â (ñåêóíäàõ):')
-    imgui.Text(u8'Òåêóùèé òàéì-àóò: ' .. dialogTimeout[0] .. u8' ñåêóíä')
+    imgui.Text(u8'Ð¢Ð°Ð¹Ð¼-Ð°ÑƒÑ‚ Ð´Ð»Ñ Ð°Ð²Ñ‚Ð¾ÑÑ‚Ð°Ñ€Ñ‚Ð° Ð² (ÑÐµÐºÑƒÐ½Ð´Ð°Ñ…):')
+    imgui.Text(u8'Ð¢ÐµÐºÑƒÑ‰Ð¸Ð¹ Ñ‚Ð°Ð¹Ð¼-Ð°ÑƒÑ‚: ' .. dialogTimeout[0] .. u8' ÑÐµÐºÑƒÐ½Ð´')
     imgui.InputText(u8'', dialogTimeoutBuffer, ffi.sizeof(dialogTimeoutBuffer))
     imgui.SameLine()
 
-    -- Êíîïêà "Ñîõðàíèòü" äëÿ òàéì-àóòà
-    if imgui.Button(faicons('floppy_disk') .. u8" Ñîõðàíèòü òàéì-àóò") then
+    -- ÐšÐ½Ð¾Ð¿ÐºÐ° "Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ" Ð´Ð»Ñ Ñ‚Ð°Ð¹Ð¼-Ð°ÑƒÑ‚Ð°
+    if imgui.Button(faicons('floppy_disk') .. u8" Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ñ‚Ð°Ð¹Ð¼-Ð°ÑƒÑ‚") then
         local newValue = tonumber(ffi.string(dialogTimeoutBuffer))
         if newValue ~= nil and newValue >= 1 and newValue <= 9999 then
-            dialogTimeout[0] = newValue -- Îáíîâëÿåì òàéì-àóò
-            saveSettings() -- Ñîõðàíÿåì èçìåíåíèÿ
-            sampAddChatMessage(taginf .. "Òàéì-àóò ñîõðàí¸í: {32CD32}" .. newValue .. " ñåêóíä", -1)
+            dialogTimeout[0] = newValue -- ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ñ‚Ð°Ð¹Ð¼-Ð°ÑƒÑ‚
+            saveSettings() -- Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ
+            sampAddChatMessage(taginf .. "Ð¢Ð°Ð¹Ð¼-Ð°ÑƒÑ‚ ÑÐ¾Ñ…Ñ€Ð°Ð½Ñ‘Ð½: {32CD32}" .. newValue .. " ÑÐµÐºÑƒÐ½Ð´", -1)
         else
-            sampAddChatMessage(taginf .. "Íåêîððåêòíîå çíà÷åíèå. {32CD32}Ââåäèòå îò 1 äî 9999.", -1)
+            sampAddChatMessage(taginf .. "ÐÐµÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ. {32CD32}Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¾Ñ‚ 1 Ð´Ð¾ 9999.", -1)
         end
     end
     imgui.PopItemWidth()
 
     imgui.Separator()
 
-    -- Èçìåíåíèå ïîëîæåíèÿ îêíà
-    imgui.Text(u8'Ïîëîæåíèå îêíà èíôîðìàöèè:')
+    -- Ð˜Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ Ð¾ÐºÐ½Ð°
+    imgui.Text(u8'ÐŸÐ¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð¾ÐºÐ½Ð° Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸:')
     imgui.SameLine()
-    if imgui.Button(u8'Èçìåíèòü ïîëîæåíèå') then
-        startMovingWindow() -- Àêòèâèðóåì ïåðåìåùåíèå îêíà ïðè íàæàòèè
+    if imgui.Button(u8'Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ') then
+        startMovingWindow() -- ÐÐºÑ‚Ð¸Ð²Ð¸Ñ€ÑƒÐµÐ¼ Ð¿ÐµÑ€ÐµÐ¼ÐµÑ‰ÐµÐ½Ð¸Ðµ Ð¾ÐºÐ½Ð° Ð¿Ñ€Ð¸ Ð½Ð°Ð¶Ð°Ñ‚Ð¸Ð¸
     end
     imgui.Separator()
-    imgui.CenterText(u8'Èçìåíåíèå öâåòà ñîîáùåíèé â ÷àòå')
-    imgui.Text(u8"Ââåäèòå HEX-êîä öâåòà (íàïðèìåð, {FF5733}):")
-    
-    -- Ïîëå äëÿ èçìåíåíèÿ colorCode
-    if imgui.InputText("Öâåòîâîé êîä", colorCode, ffi.sizeof(colorCode)) then
-        updateTags() -- Îáíîâëÿåì ïåðåìåííûå ïðè èçìåíåíèè çíà÷åíèÿ
-    end
-    
-    -- Êíîïêà äëÿ ñîõðàíåíèÿ èçìåíåíèé â öâåòå
-    if imgui.Button(u8"Ñîõðàíèòü öâåò") then
-        saveColorCode() -- Ñîõðàíÿåì íîâûé öâåò â êîíôèã
-        sampAddChatMessage(taginf .. "Öâåò òåãîâ îáíîâë¸í íà: " .. colorCode[0], -1)
+    imgui.CenterText(u8'Ð˜Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ðµ Ñ†Ð²ÐµÑ‚Ð° ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ð¹ Ð² Ñ‡Ð°Ñ‚Ðµ')
+    imgui.Text(u8"Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ HEX-ÐºÐ¾Ð´ Ñ†Ð²ÐµÑ‚Ð° (Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€, {FF5733}):")
+
+    -- ÐŸÐ¾Ð»Ðµ Ð´Ð»Ñ Ð²Ð²Ð¾Ð´Ð° colorCode Ñ Ð¼Ð°ÐºÑÐ¸Ð¼Ð°Ð»ÑŒÐ½Ð¾Ð¹ Ð´Ð»Ð¸Ð½Ð¾Ð¹ Ð±ÑƒÑ„ÐµÑ€Ð°
+    if imgui.InputText(u8"Ð¦Ð²ÐµÑ‚Ð¾Ð²Ð¾Ð¹ ÐºÐ¾Ð´", colorCode, 9) then
+        updateTags() -- ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ñ‚ÐµÐ³Ð¸ Ð¿Ñ€Ð¸ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ð¸ colorCode
     end
 
-    imgui.Text(u8"Òåêóùèé òåã: " .. tag)
-    imgui.Text(u8"Òåêóùèé òåã èíôîðìàöèè: " .. taginf)
+    -- ÐšÐ½Ð¾Ð¿ÐºÐ° Ð´Ð»Ñ ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ñ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ð¹ Ð² colorCode
+    if imgui.Button(u8"Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ñ†Ð²ÐµÑ‚") then
+        saveColorCode() -- Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼ Ð½Ð¾Ð²Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ colorCode Ð² ÐºÐ¾Ð½Ñ„Ð¸Ð³
+        sampAddChatMessage(taginf .. "Ð¦Ð²ÐµÑ‚ Ñ‚ÐµÐ³Ð¾Ð² Ð¾Ð±Ð½Ð¾Ð²Ð»Ñ‘Ð½", -1)
+    end
 end
 
 function saveColorCode()
-    ini.main.colorCode = colorCode -- ñîõðàíÿåì íîâûé öâåò
+    ini.main.colorCode = ffi.string(colorCode)
     inicfg.save(ini, IniFilename)
 end
 
 function filterFloodMessage(text)
-    if hideFloodMsg[0] and text:find("%[Îøèáêà%] {FFFFFF}Ñåé÷àñ íåò âîïðîñîâ â ðåïîðò!") then
-        return false -- Áëîêèðóåì ñîîáùåíèå "Íå ôëóäè"
+    if hideFloodMsg[0] and text:find("%[ÐžÑˆÐ¸Ð±ÐºÐ°%] {FFFFFF}Ð¡ÐµÐ¹Ñ‡Ð°Ñ Ð½ÐµÑ‚ Ð²Ð¾Ð¿Ñ€Ð¾ÑÐ¾Ð² Ð² Ñ€ÐµÐ¿Ð¾Ñ€Ñ‚!") then
+        return false -- Ð‘Ð»Ð¾ÐºÐ¸Ñ€ÑƒÐµÐ¼ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ "ÐÐµ Ñ„Ð»ÑƒÐ´Ð¸"
     end
 end
 
--- Ôóíêöèÿ äëÿ ïðîâåðêè ñâîðà÷èâàíèÿ èãðû è îòêëþ÷åíèÿ àâòîñòàðòà
+-- Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð´Ð»Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ¸ ÑÐ²Ð¾Ñ€Ð°Ñ‡Ð¸Ð²Ð°Ð½Ð¸Ñ Ð¸Ð³Ñ€Ñ‹ Ð¸ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ Ð°Ð²Ñ‚Ð¾ÑÑ‚Ð°Ñ€Ñ‚Ð°
 function checkPauseAndDisableAutoStart()
     if isPauseMenuActive() then
-        -- Èãðà ñâåðíóòà
+        -- Ð˜Ð³Ñ€Ð° ÑÐ²ÐµÑ€Ð½ÑƒÑ‚Ð°
         if not gameMinimized then
-            -- Ñîõðàíÿåì ñîñòîÿíèå ëîâëè ïåðåä ñâîðà÷èâàíèåì
+            -- Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼ ÑÐ¾ÑÑ‚Ð¾ÑÐ½Ð¸Ðµ Ð»Ð¾Ð²Ð»Ð¸ Ð¿ÐµÑ€ÐµÐ´ ÑÐ²Ð¾Ñ€Ð°Ñ‡Ð¸Ð²Ð°Ð½Ð¸ÐµÐ¼
             wasActiveBeforePause = active
 
-            -- Îòêëþ÷àåì àâòîëîâëþ, åñëè îíà áûëà àêòèâíà
+            -- ÐžÑ‚ÐºÐ»ÑŽÑ‡Ð°ÐµÐ¼ Ð°Ð²Ñ‚Ð¾Ð»Ð¾Ð²Ð»ÑŽ, ÐµÑÐ»Ð¸ Ð¾Ð½Ð° Ð±Ñ‹Ð»Ð° Ð°ÐºÑ‚Ð¸Ð²Ð½Ð°
             if active then
-                active = false -- Îòêëþ÷àåì ëîâëþ
+                active = false -- ÐžÑ‚ÐºÐ»ÑŽÑ‡Ð°ÐµÐ¼ Ð»Ð¾Ð²Ð»ÑŽ
             end
 
-            -- Ñòàâèì ôëàã, ÷òî èãðà ñâåðíóòà
+            -- Ð¡Ñ‚Ð°Ð²Ð¸Ð¼ Ñ„Ð»Ð°Ð³, Ñ‡Ñ‚Ð¾ Ð¸Ð³Ñ€Ð° ÑÐ²ÐµÑ€Ð½ÑƒÑ‚Ð°
             gameMinimized = true
         end
     else
-        -- Èãðà ðàçâåðíóòà
+        -- Ð˜Ð³Ñ€Ð° Ñ€Ð°Ð·Ð²ÐµÑ€Ð½ÑƒÑ‚Ð°
         if gameMinimized then
-            -- Åñëè èãðà áûëà ñâåðíóòà è ëîâëÿ áûëà àêòèâíà, ìîæíî ñíîâà å¸ âêëþ÷èòü èëè âûâåñòè ñîîáùåíèå
+            -- Ð•ÑÐ»Ð¸ Ð¸Ð³Ñ€Ð° Ð±Ñ‹Ð»Ð° ÑÐ²ÐµÑ€Ð½ÑƒÑ‚Ð° Ð¸ Ð»Ð¾Ð²Ð»Ñ Ð±Ñ‹Ð»Ð° Ð°ÐºÑ‚Ð¸Ð²Ð½Ð°, Ð¼Ð¾Ð¶Ð½Ð¾ ÑÐ½Ð¾Ð²Ð° ÐµÑ‘ Ð²ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ Ð¸Ð»Ð¸ Ð²Ñ‹Ð²ÐµÑÑ‚Ð¸ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ
             gameMinimized = false
 
-            -- Åñëè ëîâëÿ áûëà àêòèâíà ïåðåä ñâîðà÷èâàíèåì, âîçìîæíî, ìîæíî àêòèâèðîâàòü å¸ ÷åðåç òàéìåð
+            -- Ð•ÑÐ»Ð¸ Ð»Ð¾Ð²Ð»Ñ Ð±Ñ‹Ð»Ð° Ð°ÐºÑ‚Ð¸Ð²Ð½Ð° Ð¿ÐµÑ€ÐµÐ´ ÑÐ²Ð¾Ñ€Ð°Ñ‡Ð¸Ð²Ð°Ð½Ð¸ÐµÐ¼, Ð²Ð¾Ð·Ð¼Ð¾Ð¶Ð½Ð¾, Ð¼Ð¾Ð¶Ð½Ð¾ Ð°ÐºÑ‚Ð¸Ð²Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ ÐµÑ‘ Ñ‡ÐµÑ€ÐµÐ· Ñ‚Ð°Ð¹Ð¼ÐµÑ€
             if wasActiveBeforePause then
-                sampAddChatMessage(tag .. '{FFFFFF}Âû âûøëè èç ïàóçû. Ëîâëÿ îòêëþ÷åíà èç-çà AFK!!', -1)
+                sampAddChatMessage(tag .. '{FFFFFF}Ð’Ñ‹ Ð²Ñ‹ÑˆÐ»Ð¸ Ð¸Ð· Ð¿Ð°ÑƒÐ·Ñ‹. Ð›Ð¾Ð²Ð»Ñ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡ÐµÐ½Ð° Ð¸Ð·-Ð·Ð° AFK!!', -1)
             end
         end
     end
 end
 
 function drawInfoTab()
-    imgui.CenterText(u8'Èíôîðìàöèÿ î ñêðèïòå')
+    imgui.CenterText(u8'Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ Ð¾ ÑÐºÑ€Ð¸Ð¿Ñ‚Ðµ')
     imgui.Separator()
-    imgui.Text(u8'Àâòîð: Matthew_McLaren[18]')
-    imgui.Text(u8'Âåðñèÿ: %s', scriptver)
-	imgui.Text(u8'Ñâÿçü ñ ðàçðàáîò÷èêîì:')
+    imgui.Text(u8'ÐÐ²Ñ‚Ð¾Ñ€: Matthew_McLaren[18]')
+    imgui.Text(u8'Ð’ÐµÑ€ÑÐ¸Ñ: %s', scriptver)
+	imgui.Text(u8'Ð¡Ð²ÑÐ·ÑŒ Ñ Ñ€Ð°Ð·Ñ€Ð°Ð±Ð¾Ñ‚Ñ‡Ð¸ÐºÐ¾Ð¼:')
 	imgui.SameLine()
 	imgui.Link('https://t.me/Zorahm', 'Telegram')
     imgui.Text(u8'')
-    imgui.Text(u8'Ñêðèïò àâòîìàòè÷åñêè îòïðàâëÿåò êîìàíäó /ot.')
-    imgui.Text(u8'×åðåç îïðåäåëåííûå èíòåðâàëû âðåìåíè.')
-    imgui.Text(u8'À òàêæå âûñëåæèâàåò îïðåäåëåííûå íàäïèñè.')
+    imgui.Text(u8'Ð¡ÐºÑ€Ð¸Ð¿Ñ‚ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÑÐµÑ‚ ÐºÐ¾Ð¼Ð°Ð½Ð´Ñƒ /ot.')
+    imgui.Text(u8'Ð§ÐµÑ€ÐµÐ· Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð½Ñ‹Ðµ Ð¸Ð½Ñ‚ÐµÑ€Ð²Ð°Ð»Ñ‹ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸.')
+    imgui.Text(u8'Ð Ñ‚Ð°ÐºÐ¶Ðµ Ð²Ñ‹ÑÐ»ÐµÐ¶Ð¸Ð²Ð°ÐµÑ‚ Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð½Ñ‹Ðµ Ð½Ð°Ð´Ð¿Ð¸ÑÐ¸.')
 	imgui.Text(u8'')
-    imgui.CenterText(u8'À òàêæå ñïàñèáî:')
-    imgui.Text(u8'Òåñòåð: Carl_Mort[18].')
+    imgui.CenterText(u8'Ð Ñ‚Ð°ÐºÐ¶Ðµ ÑÐ¿Ð°ÑÐ¸Ð±Ð¾:')
+    imgui.Text(u8'Ð¢ÐµÑÑ‚ÐµÑ€: Carl_Mort[18].')
 end
 
--- Ôóíêöèÿ äëÿ îòðèñîâêè âêëàäêè "ChangeLog"
+-- Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð´Ð»Ñ Ð¾Ñ‚Ñ€Ð¸ÑÐ¾Ð²ÐºÐ¸ Ð²ÐºÐ»Ð°Ð´ÐºÐ¸ "ChangeLog"
 function drawChangeLogTab()
-    imgui.CenterText(u8("Èçìåíåíèÿ ïî âåðñèÿì:"))
+    imgui.CenterText(u8("Ð˜Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ Ð¿Ð¾ Ð²ÐµÑ€ÑÐ¸ÑÐ¼:"))
     imgui.Separator()
 
-    -- Ïðîõîäèì ïî êàæäîìó ýëåìåíòó â changelog
+    -- ÐŸÑ€Ð¾Ñ…Ð¾Ð´Ð¸Ð¼ Ð¿Ð¾ ÐºÐ°Ð¶Ð´Ð¾Ð¼Ñƒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñƒ Ð² changelog
     for _, entry in ipairs(changelogEntries) do
-        if imgui.CollapsingHeader(u8("Âåðñèÿ ") .. entry.version) then
-            -- Åñëè çàãîëîâîê ðàñêðûò, îòîáðàæàåì îïèñàíèå èçìåíåíèé
-            imgui.Text(u8(entry.description)) -- Óêàçûâàåì êîäèðîâêó UTF-8 äëÿ îòîáðàæåíèÿ ðóññêîãî òåêñòà
+        if imgui.CollapsingHeader(u8("Ð’ÐµÑ€ÑÐ¸Ñ ") .. entry.version) then
+            -- Ð•ÑÐ»Ð¸ Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²Ð¾Ðº Ñ€Ð°ÑÐºÑ€Ñ‹Ñ‚, Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶Ð°ÐµÐ¼ Ð¾Ð¿Ð¸ÑÐ°Ð½Ð¸Ðµ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ð¹
+            imgui.Text(u8(entry.description)) -- Ð£ÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÐ¼ ÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²ÐºÑƒ UTF-8 Ð´Ð»Ñ Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ñ Ñ€ÑƒÑÑÐºÐ¾Ð³Ð¾ Ñ‚ÐµÐºÑÑ‚Ð°
         end
     end
 end
@@ -817,13 +825,13 @@ imgui.OnFrame(function() return main_window_state[0] end, function(player)
     resetIO()
     
     imgui.BeginChild('left_panel', imgui.ImVec2(150, 0), true)
-    if imgui.Button(faicons("comment") .. u8' Ôëóäåð', imgui.ImVec2(125, 40)) then
+    if imgui.Button(faicons("comment") .. u8' Ð¤Ð»ÑƒÐ´ÐµÑ€', imgui.ImVec2(125, 40)) then
         active_tab[0] = 0
     end
-    if imgui.Button(faicons("GEAR") .. u8' Íàñòðîéêè', imgui.ImVec2(125, 40)) then
+    if imgui.Button(faicons("GEAR") .. u8' ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸', imgui.ImVec2(125, 40)) then
         active_tab[0] = 1
     end
-    if imgui.Button(faicons("circle_info") .. u8' Èíôîðìàöèÿ', imgui.ImVec2(125, 40)) then
+    if imgui.Button(faicons("circle_info") .. u8' Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ', imgui.ImVec2(125, 40)) then
         active_tab[0] = 2
     end
     if imgui.Button(faicons("wrench") .. u8' ChangeLog', imgui.ImVec2(125, 40)) then
@@ -852,13 +860,13 @@ function onWindowMessage(msg, wparam, lparam)
     if changingKey then
         if msg == 0x100 or msg == 0x101 then -- WM_KEYDOWN or WM_KEYUP
             keyBind = wparam
-            keyBindName = vkeys.id_to_name(keyBind) -- Âûçîâ ôóíêöèè äëÿ ïîëó÷åíèÿ èìåíè êëàâèøè
+            keyBindName = vkeys.id_to_name(keyBind) -- Ð’Ñ‹Ð·Ð¾Ð² Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ Ð´Ð»Ñ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ñ Ð¸Ð¼ÐµÐ½Ð¸ ÐºÐ»Ð°Ð²Ð¸ÑˆÐ¸
             changingKey = false
             ini.main.keyBind = string.format("0x%X", keyBind)
             ini.main.keyBindName = keyBindName
             inicfg.save(ini, IniFilename)
-            sampAddChatMessage(string.format(tag .. '{FFFFFF}Íîâàÿ êëàâèøà àêòèâàöèè ëîâëè ðåïîðòà: {00FF00}%s', keyBindName), -1)
-            return false -- ïðåäîòâðàùàåò äàëüíåéøóþ îáðàáîòêó ñîîáùåíèÿ
+            sampAddChatMessage(string.format(tag .. '{FFFFFF}ÐÐ¾Ð²Ð°Ñ ÐºÐ»Ð°Ð²Ð¸ÑˆÐ° Ð°ÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ð¸ Ð»Ð¾Ð²Ð»Ð¸ Ñ€ÐµÐ¿Ð¾Ñ€Ñ‚Ð°: {00FF00}%s', keyBindName), -1)
+            return false -- Ð¿Ñ€ÐµÐ´Ð¾Ñ‚Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ Ð´Ð°Ð»ÑŒÐ½ÐµÐ¹ÑˆÑƒÑŽ Ð¾Ð±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÑƒ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ
         end
     end
 end
@@ -870,7 +878,7 @@ function imgui.CenterText(text)
     imgui.Text(text)
 end
 
--- Àðèçîíîâñêèå óâåäîìëåíèÿ
+-- ÐÑ€Ð¸Ð·Ð¾Ð½Ð¾Ð²ÑÐºÐ¸Ðµ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ
 function show_arz_notify(type, title, text, time)
     if MONET_VERSION ~= nil then
         if type == 'info' then
@@ -914,44 +922,44 @@ function show_arz_notify(type, title, text, time)
     end
 end
 
--- Ôóíêöèÿ äëÿ îòðèñîâêè îêíà èíôîðìàöèè
+-- Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð´Ð»Ñ Ð¾Ñ‚Ñ€Ð¸ÑÐ¾Ð²ÐºÐ¸ Ð¾ÐºÐ½Ð° Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸
 imgui.OnFrame(function() return info_window_state[0] end, function(self)
     self.HideCursor = true
-    -- Óñòàíàâëèâàåì ìèíèìàëüíûå è ìàêñèìàëüíûå ðàçìåðû îêíà
+    -- Ð£ÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÐ¼ Ð¼Ð¸Ð½Ð¸Ð¼Ð°Ð»ÑŒÐ½Ñ‹Ðµ Ð¸ Ð¼Ð°ÐºÑÐ¸Ð¼Ð°Ð»ÑŒÐ½Ñ‹Ðµ Ñ€Ð°Ð·Ð¼ÐµÑ€Ñ‹ Ð¾ÐºÐ½Ð°
     imgui.SetNextWindowSize(imgui.ImVec2(220, 175), imgui.Cond.FirstUseEver)
     imgui.SetNextWindowPos(imgui.ImVec2(ini.widget.posX, ini.widget.posY), imgui.Cond.Always)
 
-    -- Íà÷àëî îêíà ñ ôëàãàìè
-    imgui.Begin(faicons('gear') .. u8" Èíôîðìàöèÿ " .. faicons('gear'), info_window_state, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse)
-    imgui.CenterText(u8'Ñòàòóñ Ëîâëè: Âêëþ÷åíà')
-    -- Âðåìÿ ðàáîòû àâòîëîâëè
+    -- ÐÐ°Ñ‡Ð°Ð»Ð¾ Ð¾ÐºÐ½Ð° Ñ Ñ„Ð»Ð°Ð³Ð°Ð¼Ð¸
+    imgui.Begin(faicons('gear') .. u8" Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ " .. faicons('gear'), info_window_state, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse)
+    imgui.CenterText(u8'Ð¡Ñ‚Ð°Ñ‚ÑƒÑ Ð›Ð¾Ð²Ð»Ð¸: Ð’ÐºÐ»ÑŽÑ‡ÐµÐ½Ð°')
+    -- Ð’Ñ€ÐµÐ¼Ñ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Ð°Ð²Ñ‚Ð¾Ð»Ð¾Ð²Ð»Ð¸
     local elapsedTime = os.clock() - startTime
-    imgui.CenterText(string.format(u8'Âðåìÿ ðàáîòû: %.2f ñåê', elapsedTime))
+    imgui.CenterText(string.format(u8'Ð’Ñ€ÐµÐ¼Ñ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹: %.2f ÑÐµÐº', elapsedTime))
 
-    -- Êîëè÷åñòâî îòâåòîâ íà ðåïîðò (ïîÿâëåíèå äèàëîãà 1334)
-    imgui.CenterText(string.format(u8'Îòâå÷åíî ðåïîðòà: %d', reportAnsweredCount))
+    -- ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¾Ñ‚Ð²ÐµÑ‚Ð¾Ð² Ð½Ð° Ñ€ÐµÐ¿Ð¾Ñ€Ñ‚ (Ð¿Ð¾ÑÐ²Ð»ÐµÐ½Ð¸Ðµ Ð´Ð¸Ð°Ð»Ð¾Ð³Ð° 1334)
+    imgui.CenterText(string.format(u8'ÐžÑ‚Ð²ÐµÑ‡ÐµÐ½Ð¾ Ñ€ÐµÐ¿Ð¾Ñ€Ñ‚Ð°: %d', reportAnsweredCount))
     imgui.Separator()
-    -- Ñòàòóñ îáðàáîòêè äèàëîãîâ
-    imgui.Text(u8'Îáðàáîòêà äèàëîãîâ:')
+    -- Ð¡Ñ‚Ð°Ñ‚ÑƒÑ Ð¾Ð±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ¸ Ð´Ð¸Ð°Ð»Ð¾Ð³Ð¾Ð²
+    imgui.Text(u8'ÐžÐ±Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ° Ð´Ð¸Ð°Ð»Ð¾Ð³Ð¾Ð²:')
     imgui.SameLine()
     if dialogHandlerEnabled[0] then
-        imgui.Text(u8'Âêëþ÷åíà')
+        imgui.Text(u8'Ð’ÐºÐ»ÑŽÑ‡ÐµÐ½Ð°')
     else
-        imgui.Text(u8'Âûêë.')
+        imgui.Text(u8'Ð’Ñ‹ÐºÐ».')
     end
 
-    -- Ñòàòóñ àâòîñòàðòà
-    imgui.Text(u8'Àâòîñòàðò:')
+    -- Ð¡Ñ‚Ð°Ñ‚ÑƒÑ Ð°Ð²Ñ‚Ð¾ÑÑ‚Ð°Ñ€Ñ‚Ð°
+    imgui.Text(u8'ÐÐ²Ñ‚Ð¾ÑÑ‚Ð°Ñ€Ñ‚:')
     imgui.SameLine()
     if autoStartEnabled[0] then
-        imgui.Text(u8'Âêëþ÷åí')
+        imgui.Text(u8'Ð’ÐºÐ»ÑŽÑ‡ÐµÐ½')
     else
-        imgui.Text(u8'Âûêëþ÷åí')
+        imgui.Text(u8'Ð’Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½')
     end
-    imgui.End() -- Çàâåðøåíèå îêíà
+    imgui.End() -- Ð—Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð¸Ðµ Ð¾ÐºÐ½Ð°
 end)
 
--- Ïðèìåð ôóíêöèè äëÿ àêòèâàöèè îêíà èíôîðìàöèè
+-- ÐŸÑ€Ð¸Ð¼ÐµÑ€ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ Ð´Ð»Ñ Ð°ÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ð¸ Ð¾ÐºÐ½Ð° Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸
 function showInfoWindow()
     info_window_state[0] = true
 end
