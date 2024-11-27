@@ -1,4 +1,605 @@
-require 'lib.moonloader'
+import telebot
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+import os
+import logging
+import schedule
+import threading
+import time
+import sqlite3
+from datetime import datetime
+import math
+import re
+import sys
+import signal
+import pytz
+import json
+
+schedule = {
+    "четная": {
+        "Понедельник": ["Литература", "Литература"],
+        "Вторник": ["Информатика", "Информатика", "Математика", "Математика"],
+        "Среда": ["История", "История", "Математика", "Математика"],
+        "Четверг": ["Английский", "Английский", "Химия", "Химия"],
+        "Пятница": ["Техника личной презентации", "Техника личной презентации"]
+    },
+    "нечетная": {
+        "Понедельник": ["Литература", "Литература"],
+        "Вторник": ["Информатика", "Информатика", "Математика", "Математика"],
+        "Среда": ["География", "Биология", "Обществознание", "Обществознание"],
+        "Четверг": ["Физика", "Физика", "Физическая культура"],
+        "Пятница": ["Биология", "География", "Русский язык", "Русский язык"]
+    }
+}
+
+lesson_times = [
+    ("10:10", "11:40"),
+    ("11:50", "13:20"),
+    ("13:50", "15:20"),
+    ("15:30", "17:00")
+]
+
+def run_bot():
+    while True:
+        try:
+            # Ваш основной код бота
+            print("Бот запущен")
+            bot.polling(none_stop=True)
+        except Exception as e:
+            print(f"Критическая ошибка: {e}. Перезапуск через 5 секунд...")
+            time.sleep(5)
+            os.execv(sys.executable, ['python'] + sys.argv)
+
+# Получаем путь к директории, где находится основной файл скрипта
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'homework_bot.db')
+
+# Инициализация базы данных
+def init_db():
+    conn = sqlite3.connect(DB_PATH)  # Используем путь DB_PATH
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            chat_id TEXT PRIMARY KEY,
+            notification_time TEXT DEFAULT '09:00',
+            notification_days TEXT DEFAULT 'monday'
+        )
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS homework (
+            month TEXT,
+            week INTEGER,
+            homework_text TEXT,
+            file_id TEXT,
+            PRIMARY KEY (month, week)
+        )
+    ''')
+    conn.commit()
+    conn.close()
+    migrate_db()
+
+def migrate_db():
+    conn = sqlite3.connect('homework_bot.db')
+    cursor = conn.cursor()
+    cursor.execute("PRAGMA table_info(homework)")
+    columns = [column[1] for column in cursor.fetchall()]
+    if 'file_id' not in columns:
+        cursor.execute("ALTER TABLE homework ADD COLUMN file_id TEXT")
+        conn.commit()
+    conn.close()
+
+BOT_TOKEN ='7611154594:AAFLXYNHBIOY9-U01wdn6-5x6AG48ZhJrvA'
+bot = telebot.TeleBot(BOT_TOKEN)
+logging.basicConfig(level=logging.INFO, filename='bot.log', filemode='a')
+
+MONTHS = ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь"]
+DAYS_OF_WEEK = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+ADMIN_IDS = [5629302452, 987654321]
+
+user_ids = set()
+
+# Сохранение в файл
+with open("user_ids.json", "w") as f:
+    json.dump(list(user_ids), f)
+
+# Загрузка из файла при старте бота
+try:
+    with open("user_ids.json", "r") as f:
+        user_ids = set(json.load(f))
+except FileNotFoundError:
+    user_ids = set()
+    
+@bot.message_handler(commands=['broadcast'])
+def admin_broadcast(message):
+    if message.chat.id in ADMIN_IDS:
+        bot.send_message(ADMIN_IDS[0], "Введите текст для рассылки:")
+        bot.register_next_step_handler(message, process_broadcast)
+    else:
+        bot.send_message(message.chat.id, "Команда доступна только администратору.")
+
+def process_broadcast(message):
+    text = message.text
+    broadcast_message(text)
+    bot.send_message(ADMIN_IDS[0], "Сообщение успешно отправлено!")
+
+
+@bot.message_handler(commands=['report'])
+def handle_report(message):
+    bot.send_message(message.chat.id, "Опишите вашу проблему или предложение:")
+    bot.register_next_step_handler(message, process_report)
+
+def process_report(message):
+    report_text = message.text
+    user_id = message.chat.id
+    username = message.from_user.username or "Без имени"
+
+    # Отправка админу
+    admin_message = f"📢 Новый отчет от пользователя @{username} (ID: {user_id}):\n\n{report_text}"
+    try:
+        bot.send_message(ADMIN_IDS[0], admin_message)
+        bot.send_message(user_id, "Спасибо за ваш отчет! Мы рассмотрим его в ближайшее время.")
+    except Exception as e:
+        bot.send_message(user_id, "Не удалось отправить отчет. Попробуйте позже.")
+        print(f"Ошибка отправки отчета: {e}")
+        logging.error(f"Ошибка отправки отчета: {e}")
+
+@bot.message_handler(commands=['view_reports'])
+def view_reports(message):
+    if message.chat.id in ADMIN_IDS:
+        try:
+            with open("reports.json", "r") as f:
+                reports = f.readlines()
+            if reports:
+                bot.send_message(ADMIN_IDS[0], "📄 Список отчетов:")
+                for report in reports:
+                    bot.send_message(ADMIN_IDS[0], report)
+            else:
+                bot.send_message(ADMIN_IDS[0], "Нет новых отчетов.")
+        except FileNotFoundError:
+            bot.send_message(ADMIN_IDS[0], "Файл отчетов пока пуст.")
+    else:
+        bot.send_message(message.chat.id, "Команда доступна только администратору.")
+
+# ------------------------------
+# БАЗА ДАННЫХ: ДОМАШНЕЕ ЗАДАНИЕ
+# ------------------------------
+def save_homework(month, week, homework_text):
+    conn = sqlite3.connect('homework_bot.db')
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT OR REPLACE INTO homework (month, week, homework_text)
+        VALUES (?, ?, ?)
+    """, (month, week, homework_text))
+    conn.commit()
+    conn.close()
+
+def get_homework(month, week):
+    conn = sqlite3.connect('homework_bot.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT homework_text FROM homework WHERE month = ? AND week = ?", (month, week))
+    result = cursor.fetchone()
+    conn.close()
+    return result[0] if result else None
+
+def get_weeks_with_homework(month):
+    conn = sqlite3.connect('homework_bot.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT DISTINCT week FROM homework WHERE month = ?", (month,))
+    weeks = cursor.fetchall()
+    conn.close()
+    print(f"Недели для месяца {month}: {weeks}")  # Добавлено для отладки
+    return [week[0] for week in weeks]
+
+
+@bot.message_handler(commands=['stop_bot'])
+def stop_bot(message):
+    # Проверяем, является ли пользователь администратором (если нужно)
+    if message.chat.id not in ADMIN_IDS:
+        bot.reply_to(message, "У вас нет прав для выполнения этой команды.")
+        return
+
+    bot.reply_to(message, "Бот останавливается...")
+    
+    # Останавливаем бота
+    sys.exit()  # Завершаем выполнение программы
+
+def signal_handler(sig, frame):
+    print("Бот завершен.")
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
+# ------------------------------
+# /start
+# ------------------------------
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    # Основные команды для всех пользователей
+    info_msg = (
+        "👋 Добро пожаловать!\n"
+        "Я бот для помощи в учебе и других задачах.\n\n"
+        "📋 Доступные команды:\n\n"
+        "📚 Домашние задания:\n"
+        "/homework - Посмотреть домашнее задание\n"
+        "/show_homework <месяц> <неделя> - Задание за определенную дату\n\n"
+        "📖 Расписание:\n"
+        "/current_lesson - Какая пара идет сейчас\n\n"
+        "🧮 Калькулятор:\n"
+        "/calc - Запустить калькулятор\n"
+        "/calc_help - Справка по калькулятору\n\n"
+        "🛠️ Прочее:\n"
+        "/report - Отправить сообщение о проблеме или предложении\n"
+        "/start - Показать это сообщение\n"
+        "/help - Получить справку по боту\n\n"
+        "📢 Уведомления:\n"
+        "/subscribe - Подписаться на рассылку уведомлений\n"
+        "/unsubscribe - Отписаться от рассылки уведомлений\n\n"
+        "✨ Советы:\n"
+        "1. Используйте точные команды, чтобы получить желаемый результат.\n"
+        "2. Если что-то не работает, сообщите через /report."
+    )
+    
+    # Проверка, является ли пользователь администратором
+    if message.from_user.id in ADMIN_IDS:
+        info_msg += "\n\n🔧 Админские команды:\n"
+        info_msg += "/broadcast - Отправить сообщение всем пользователям\n"
+        info_msg += "/add_homework - Добавить домашнее задание\n"
+
+    # Отправляем сообщение с доступными командами
+    bot.send_message(message.chat.id, info_msg)
+
+
+@bot.message_handler(commands=['help'])
+def send_help(message):
+    bot.send_message(message.chat.id, "Я могу выполнять различные математические операции. Просто введите выражение или используйте клавиатуру для выбора операции. Вот что я поддерживаю:\n- Сложение, вычитание, умножение, деление\n- Квадратный корень, степень\n- Логарифмы и тригонометрия")
+
+# ------------------------------
+# /calc_help - отображение справки по калькулятору
+# ------------------------------
+@bot.message_handler(commands=['calc_help'])
+def handle_calc_help(message):
+    # Отправляем подробную информацию о калькуляторе
+    bot.send_message(
+        message.chat.id,
+        "Привет! Я калькулятор. Вот что ты можешь со мной делать:\n\n"
+        "1. Используй стандартные математические операторы:\n"
+        "- Сложение: +\n"
+        "- Вычитание: -\n"
+        "- Умножение: *\n"
+        "- Деление: /\n"
+        "- Степень: ^ (например, 2^3)\n"
+        "- Квадратный корень: sqrt (например, sqrt 16)\n"
+        "- Факториал: ! (например, 5!)\n"
+        "- Логарифм: log(x, base) (например, log(10, 2))\n"
+        "- Тригонометрические функции: sin(x), cos(x), tan(x) (например, sin(30))\n\n"
+        "2. Примеры ввода:\n"
+        "- 3 + 5\n"
+        "- 10 * 2\n"
+        "- sqrt 25\n"
+        "- 2^3\n"
+        "- 5!\n"
+        "- log(10, 2)\n"
+        "- sin(30)\n\n"
+        "3. Вводи выражение и я вычислю результат!"
+    )
+
+# ------------------------------
+# /calc - выполнение вычислений
+# ------------------------------
+@bot.message_handler(commands=['calc'])
+def handle_calc(message):
+    bot.send_message(message.chat.id, "Введите математическое выражение для вычисления:")
+    bot.register_next_step_handler(message, process_calculation)
+
+def process_calculation(message):
+    try:
+        expression = message.text.strip().lower()  # Приводим текст к нижнему регистру
+
+        # Преобразуем выражение для поддержки новых операций
+        expression = expression.replace('^', '**')  # Заменяем ^ на **
+        expression = expression.replace('sqrt', 'math.sqrt')  # Заменяем sqrt на math.sqrt
+        expression = expression.replace('log', 'math.log')  # Заменяем log на math.log
+        expression = expression.replace('sin', 'math.sin')  # Заменяем sin на math.sin
+        expression = expression.replace('cos', 'math.cos')  # Заменяем cos на math.cos
+        expression = expression.replace('tan', 'math.tan')  # Заменяем tan на math.tan
+
+        # Обработка sqrt для добавления нужных скобок
+        expression = re.sub(r'(math\.sqrt)(\s*(\d+))', r'\1(\2)', expression)  # Преобразует "sqrt 25" в "math.sqrt(25)"
+
+        # Закрытие скобок для других математических функций, если это нужно
+        expression = re.sub(r'(math\.\w+)(\d+)', r'\1(\2)', expression)
+
+        # Обработка факториала
+        while '!' in expression:
+            match = re.search(r'(\d+)!', expression)
+            if match:
+                number = int(match.group(1))
+                factorial_result = math.factorial(number)
+                expression = expression.replace(f"{number}!", str(factorial_result))
+            else:
+                break
+
+        # Вычисление результата
+        result = eval(expression)
+        bot.send_message(message.chat.id, f"Результат: {result}")
+    except Exception as e:
+        bot.send_message(message.chat.id, f"Произошла ошибка: {str(e)}")
+
+# ------------------------------
+# ДОБАВЛЕНИЕ ДОМАШНЕГО ЗАДАНИЯ
+# ------------------------------
+@bot.message_handler(commands=['add_homework'])
+def add_homework(message):
+    if message.chat.id not in ADMIN_IDS:
+        bot.reply_to(message, "У вас нет прав для выполнения этой команды.")
+        return
+
+    bot.send_message(message.chat.id, 
+                     "Введите месяц, неделю и текст задания в формате:\nМесяц, Неделя, Задание",
+                     parse_mode="Markdown")
+    bot.register_next_step_handler(message, process_add_homework)
+
+def process_add_homework(message):
+    try:
+        data = message.text.split(", ")
+        if len(data) < 3:
+            raise ValueError("Неверный формат ввода.")
+        
+        month, week, homework_text = data[0], int(data[1]), message.text.split(", ", 2)[2]
+
+        if month not in MONTHS:
+            bot.reply_to(message, "Указан неверный месяц. Попробуйте снова.")
+            return
+
+        save_homework(month, week, homework_text)
+        bot.reply_to(message, f"Задание для {month}, Неделя {week} сохранено.")
+        
+    except Exception as e:
+        bot.reply_to(message, f"Ошибка: {e}")
+# ------------------------------
+# ПОКАЗ ДОМАШНЕГО ЗАДАНИЯ
+# ------------------------------
+@bot.message_handler(commands=['show_homework'])
+def show_homework(message):
+    try:
+        data = message.text.split(" ", 2)
+        if len(data) != 3:
+            bot.reply_to(message, "Используйте формат: /show_homework месяц неделя")
+            return
+
+        _, month, week = data
+        week = int(week)
+
+        homework = get_homework(month, week)
+        if homework:
+            bot.send_message(message.chat.id, f"📚 Домашнее задание для {month}, Неделя {week}:\n{homework}")
+        else:
+            bot.send_message(message.chat.id, f"Задание для {month}, Неделя {week} не найдено.")
+    except Exception as e:
+        bot.reply_to(message, f"Ошибка: {e}")
+
+# ------------------------------
+# КНОПКИ ДЛЯ ДОСТУПА К ДОМАШНЕМУ ЗАДАНИЮ
+# ------------------------------
+def create_month_buttons():
+    markup = InlineKeyboardMarkup()
+    for month in MONTHS:
+        markup.add(InlineKeyboardButton(month, callback_data=f"month_{month}"))
+    return markup
+
+def create_week_buttons(month):
+    weeks = get_weeks_with_homework(month)
+    markup = InlineKeyboardMarkup()
+    for week in weeks:
+        markup.add(InlineKeyboardButton(f"Неделя {week}", callback_data=f"week_{month}_{week}"))
+    return markup
+
+# ------------------------------
+# /homework
+# ------------------------------
+@bot.message_handler(commands=['homework'])
+def homework_menu(message):
+    print(f"Получена команда /homework от {message.chat.id}")  # Для отладки
+    bot.send_message(
+        message.chat.id,
+        "Выберите месяц, чтобы посмотреть задания:",
+        reply_markup=create_month_buttons()
+    )
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith("month_"))
+def handle_month(call):
+    try:
+        month = call.data.split("_")[1]
+        markup = create_week_buttons(month)
+        bot.edit_message_text(
+            f"Вы выбрали {month}. Выберите неделю:",
+            chat_id=call.message.chat.id,
+            message_id=call.message.message_id,
+            reply_markup=markup
+        )
+    except Exception as e:
+        bot.send_message(call.message.chat.id, "Произошла ошибка при обработке команды.")
+        logging.error(f"Ошибка в handle_month: {e}, {str(call.data)}")  # Логируем дополнительную информацию
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith("week_"))
+def handle_week(call):
+    _, month, week = call.data.split("_")
+    week = int(week)
+    homework = get_homework(month, week)
+    if homework:
+        bot.send_message(call.message.chat.id, f"📚 Домашнее задание для {month}, Неделя {week}:\n\n{homework}")
+    else:
+        bot.send_message(call.message.chat.id, f"Задание для {month}, Неделя {week} не найдено.")
+
+# Функция для отправки рассылки
+def send_broadcast(message_text):
+    try:
+        with open("subscribers.json", "r") as f:
+            subscribers = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        subscribers = []
+    
+    for user_id in subscribers:
+        try:
+            bot.send_message(user_id, message_text)
+        except Exception as e:
+            print(f"Не удалось отправить сообщение пользователю {user_id}: {e}")
+
+# Обработчик команды /broadcast
+@bot.message_handler(commands=['broadcast'])
+def handle_broadcast(message):
+    if message.chat.id == ADMIN_IDS[0]:  # Проверка на администратора
+        bot.send_message(message.chat.id, "📝 Напишите текст для рассылки.")
+        
+        # Переход к следующему состоянию — ожидание текста
+        bot.register_next_step_handler(message, broadcast_message)
+    else:
+        bot.send_message(message.chat.id, "❌ У вас нет прав для использования этой команды.")
+
+def broadcast_message(message_text):
+    """
+    Функция для отправки сообщения всем подписанным пользователям.
+    Если передан текст сообщения, отправляет его всем подписанным пользователям.
+    """
+    # Если message_text — это строка, используем её как текст
+    if isinstance(message_text, str):
+        text = message_text
+    # Если message_text — это объект Message от Telegram, извлекаем текст
+    elif hasattr(message_text, 'text'):
+        text = message_text.text
+    else:
+        # Если это не строка и не объект сообщения Telegram, выдаем ошибку
+        raise ValueError("Передан некорректный параметр для рассылки.")
+
+    # Отправляем текст всем пользователям, которые подписаны на рассылку
+    for user_id in subscribed_users:
+        try:
+            bot.send_message(user_id, text)
+            print(f"Сообщение отправлено пользователю {user_id}")
+        except Exception as e:
+            print(f"Ошибка при отправке сообщения пользователю {user_id}: {e}")
+
+
+# Функция для сохранения ID пользователя
+def save_user_id(user_id):
+    try:
+        with open("subscribers.json", "r") as f:
+            subscribers = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        subscribers = []
+    
+    if user_id not in subscribers:
+        subscribers.append(user_id)
+        with open("subscribers.json", "w") as f:
+            json.dump(subscribers, f)
+
+@bot.message_handler(commands=['subscribe'])
+def subscribe(message):
+    user_id = message.chat.id
+    save_user_id(user_id)
+    bot.send_message(user_id, "✅ Вы успешно подписались на рассылку!")
+
+@bot.message_handler(commands=['unsubscribe'])
+def unsubscribe(message):
+    user_id = message.chat.id
+    try:
+        with open("subscribers.json", "r") as f:
+            subscribers = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        subscribers = []
+    
+    if user_id in subscribers:
+        subscribers.remove(user_id)
+        with open("subscribers.json", "w") as f:
+            json.dump(subscribers, f)
+        bot.send_message(user_id, "❌ Вы отписались от рассылки.")
+    else:
+        bot.send_message(user_id, "❌ Вы не были подписаны на рассылку.")
+
+
+# Загрузка данных
+def load_users():
+    # Здесь можно подключить вашу базу данных или файл
+    try:
+        with open("user_data.json", "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+# Сохранение данных
+def save_users(data):
+    with open("user_data.json", "w") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
+@bot.message_handler(commands=['set_week'])
+def set_week(message):
+    # Проверка, является ли пользователь админом
+    if message.from_user.id not in ADMIN_IDS:
+        bot.send_message(message.chat.id, "❌ У вас нет прав для использования этой команды.")
+        return
+
+    try:
+        week_type = message.text.split()[1].strip().lower()  # Получаем тип недели из команды
+        if week_type in ['четная', 'нечетная']:
+            # Сохраняем тип недели в файл
+            with open("week_type.txt", "w") as f:
+                f.write(week_type)
+            bot.send_message(message.chat.id, f"✅ Текущая неделя установлена: {week_type.capitalize()}")
+        else:
+            bot.send_message(message.chat.id, "❌ Укажите тип недели: четная или нечетная.")
+    except IndexError:
+        bot.send_message(message.chat.id, "❌ Укажите тип недели после команды. Например: /set_week четная")
+
+@bot.message_handler(commands=['current_lesson'])
+def current_lesson(message):
+    try:
+        # Читаем текущий тип недели
+        with open("week_type.txt", "r") as f:
+            week_type = f.read().strip().lower()
+
+        # Определяем текущий день недели и время
+        moscow_tz = pytz.timezone('Europe/Moscow')
+        current_time = datetime.now(moscow_tz)
+        weekday = current_time.strftime("%A").lower()
+        current_time_str = current_time.strftime("%H:%M")
+
+        # Определяем текущую пару
+        for i, (start, end) in enumerate(lesson_times):
+            if start <= current_time_str <= end:
+                lesson_index = i
+                start_time = datetime.strptime(start, "%H:%M")
+                end_time = datetime.strptime(end, "%H:%M")
+                current_time_obj = datetime.strptime(current_time_str, "%H:%M")
+                
+                # Рассчитываем прошедшее и оставшееся время
+                elapsed_time = (current_time_obj - start_time).seconds // 60
+                remaining_time = (end_time - current_time_obj).seconds // 60
+                break
+        else:
+            bot.send_message(message.chat.id, "❌ Сейчас нет пар.")
+            return
+
+        # Получаем предмет текущей пары
+        lessons_today = schedule.get(week_type, {}).get(weekday.capitalize(), [])
+        if lesson_index < len(lessons_today):
+            current_subject = lessons_today[lesson_index]
+            bot.send_message(
+                message.chat.id,
+                f"💼 Сейчас идёт {lesson_index + 1}-я пара: {current_subject}\n"
+                f"Неделя: {week_type.capitalize()}.\n"
+                f"Прошло времени: {elapsed_time} минут.\n"
+                f"До окончания осталось: {remaining_time} минут."
+            )
+        else:
+            bot.send_message(message.chat.id, "❌ Сегодня пар больше нет.")
+    except FileNotFoundError:
+        bot.send_message(message.chat.id, "❌ Тип недели не установлен. Обратитесь к Администратору.")
+    except Exception as e:
+        bot.send_message(message.chat.id, f"❌ Произошла ошибка: {str(e)}")
+
+
+if __name__ == "__main__":
+    run_bot()require 'lib.moonloader'
 local imgui = require 'mimgui'
 local sampev = require 'lib.samp.events'
 local vkeys = require 'vkeys'
