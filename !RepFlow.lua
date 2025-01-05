@@ -1,622 +1,18 @@
-import telebot
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-import os
-import logging
-import schedule
-import threading
-import time
-import sqlite3
-from datetime import datetime
-import math
-import re
-import sys
-import signal
-import pytz
-import json
-
-schedule = {
-    "четная": {
-        "Понедельник": ["Литература", "Литература"],
-        "Вторник": ["Информатика", "Информатика", "Математика", "Математика"],
-        "Среда": ["История", "История", "Математика", "Математика"],
-        "Четверг": ["Английский", "Английский", "Химия", "Химия"],
-        "Пятница": ["Техника личной презентации", "Техника личной презентации"]
-    },
-    "нечетная": {
-        "Понедельник": ["Литература", "Литература"],
-        "Вторник": ["Информатика", "Информатика", "Математика", "Математика"],
-        "Среда": ["География", "Биология", "Обществознание", "Обществознание"],
-        "Четверг": ["Физика", "Физика", "Физическая культура"],
-        "Пятница": ["Биология", "География", "Русский язык", "Русский язык"]
-    }
-}
-
-lesson_times = [
-    ("10:10", "11:40"),
-    ("11:50", "13:20"),
-    ("13:50", "15:20"),
-    ("15:30", "17:00")
-]
-
-def run_bot():
-    while True:
-        try:
-            # Ваш основной код бота
-            print("Бот запущен")
-            bot.polling(none_stop=True)
-        except Exception as e:
-            print(f"Критическая ошибка: {e}. Перезапуск через 5 секунд...")
-            time.sleep(5)
-            os.execv(sys.executable, ['python'] + sys.argv)
-
-# Получаем путь к директории, где находится основной файл скрипта
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, 'homework_bot.db')
-
-# Инициализация базы данных
-def init_db():
-    conn = sqlite3.connect(DB_PATH)  # Используем путь DB_PATH
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            chat_id TEXT PRIMARY KEY,
-            notification_time TEXT DEFAULT '09:00',
-            notification_days TEXT DEFAULT 'monday'
-        )
-    ''')
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS homework (
-            month TEXT,
-            week INTEGER,
-            homework_text TEXT,
-            file_id TEXT,
-            PRIMARY KEY (month, week)
-        )
-    ''')
-    conn.commit()
-    conn.close()
-    migrate_db()
-
-def migrate_db():
-    conn = sqlite3.connect('homework_bot.db')
-    cursor = conn.cursor()
-    cursor.execute("PRAGMA table_info(homework)")
-    columns = [column[1] for column in cursor.fetchall()]
-    if 'file_id' not in columns:
-        cursor.execute("ALTER TABLE homework ADD COLUMN file_id TEXT")
-        conn.commit()
-    conn.close()
-
-BOT_TOKEN ='7611154594:AAFLXYNHBIOY9-U01wdn6-5x6AG48ZhJrvA'
-bot = telebot.TeleBot(BOT_TOKEN)
-logging.basicConfig(level=logging.INFO, filename='bot.log', filemode='a')
-
-MONTHS = ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь"]
-DAYS_OF_WEEK = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
-ADMIN_IDS = [5629302452, 987654321]
-
-user_ids = set()
-
-# Сохранение в файл
-with open("user_ids.json", "w") as f:
-    json.dump(list(user_ids), f)
-
-# Загрузка из файла при старте бота
-try:
-    with open("user_ids.json", "r") as f:
-        user_ids = set(json.load(f))
-except FileNotFoundError:
-    user_ids = set()
-    
-@bot.message_handler(commands=['broadcast'])
-def admin_broadcast(message):
-    if message.chat.id in ADMIN_IDS:
-        bot.send_message(ADMIN_IDS[0], "Введите текст для рассылки:")
-        bot.register_next_step_handler(message, process_broadcast)
-    else:
-        bot.send_message(message.chat.id, "Команда доступна только администратору.")
-
-def process_broadcast(message):
-    text = message.text
-    broadcast_message(text)
-    bot.send_message(ADMIN_IDS[0], "Сообщение успешно отправлено!")
-
-
-@bot.message_handler(commands=['report'])
-def handle_report(message):
-    bot.send_message(message.chat.id, "Опишите вашу проблему или предложение:")
-    bot.register_next_step_handler(message, process_report)
-
-def process_report(message):
-    report_text = message.text
-    user_id = message.chat.id
-    username = message.from_user.username or "Без имени"
-
-    # Отправка админу
-    admin_message = f"📢 Новый отчет от пользователя @{username} (ID: {user_id}):\n\n{report_text}"
-    try:
-        bot.send_message(ADMIN_IDS[0], admin_message)
-        bot.send_message(user_id, "Спасибо за ваш отчет! Мы рассмотрим его в ближайшее время.")
-    except Exception as e:
-        bot.send_message(user_id, "Не удалось отправить отчет. Попробуйте позже.")
-        print(f"Ошибка отправки отчета: {e}")
-        logging.error(f"Ошибка отправки отчета: {e}")
-
-@bot.message_handler(commands=['view_reports'])
-def view_reports(message):
-    if message.chat.id in ADMIN_IDS:
-        try:
-            with open("reports.json", "r") as f:
-                reports = f.readlines()
-            if reports:
-                bot.send_message(ADMIN_IDS[0], "📄 Список отчетов:")
-                for report in reports:
-                    bot.send_message(ADMIN_IDS[0], report)
-            else:
-                bot.send_message(ADMIN_IDS[0], "Нет новых отчетов.")
-        except FileNotFoundError:
-            bot.send_message(ADMIN_IDS[0], "Файл отчетов пока пуст.")
-    else:
-        bot.send_message(message.chat.id, "Команда доступна только администратору.")
-
-# ------------------------------
-# БАЗА ДАННЫХ: ДОМАШНЕЕ ЗАДАНИЕ
-# ------------------------------
-def save_homework(month, week, homework_text):
-    conn = sqlite3.connect('homework_bot.db')
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT OR REPLACE INTO homework (month, week, homework_text)
-        VALUES (?, ?, ?)
-    """, (month, week, homework_text))
-    conn.commit()
-    conn.close()
-
-def get_homework(month, week):
-    conn = sqlite3.connect('homework_bot.db')
-    cursor = conn.cursor()
-    cursor.execute("SELECT homework_text FROM homework WHERE month = ? AND week = ?", (month, week))
-    result = cursor.fetchone()
-    conn.close()
-    return result[0] if result else None
-
-def get_weeks_with_homework(month):
-    conn = sqlite3.connect('homework_bot.db')
-    cursor = conn.cursor()
-    cursor.execute("SELECT DISTINCT week FROM homework WHERE month = ?", (month,))
-    weeks = cursor.fetchall()
-    conn.close()
-    print(f"Недели для месяца {month}: {weeks}")  # Добавлено для отладки
-    return [week[0] for week in weeks]
-
-
-@bot.message_handler(commands=['stop_bot'])
-def stop_bot(message):
-    # Проверяем, является ли пользователь администратором (если нужно)
-    if message.chat.id not in ADMIN_IDS:
-        bot.reply_to(message, "У вас нет прав для выполнения этой команды.")
-        return
-
-    bot.reply_to(message, "Бот останавливается...")
-    
-    # Останавливаем бота
-    sys.exit()  # Завершаем выполнение программы
-
-def signal_handler(sig, frame):
-    print("Бот завершен.")
-    sys.exit(0)
-
-signal.signal(signal.SIGINT, signal_handler)
-signal.signal(signal.SIGTERM, signal_handler)
-
-# ------------------------------
-# /start
-# ------------------------------
-@bot.message_handler(commands=['start'])
-def send_welcome(message):
-    # Основные команды для всех пользователей
-    info_msg = (
-        "👋 Добро пожаловать!\n"
-        "Я бот для помощи в учебе и других задачах.\n\n"
-        "📋 Доступные команды:\n\n"
-        "📚 Домашние задания:\n"
-        "/homework - Посмотреть домашнее задание\n"
-        "/show_homework <месяц> <неделя> - Задание за определенную дату\n\n"
-        "📖 Расписание:\n"
-        "/current_lesson - Какая пара идет сейчас\n\n"
-        "🧮 Калькулятор:\n"
-        "/calc - Запустить калькулятор\n"
-        "/calc_help - Справка по калькулятору\n\n"
-        "🛠️ Прочее:\n"
-        "/report - Отправить сообщение о проблеме или предложении\n"
-        "/start - Показать это сообщение\n"
-        "/help - Получить справку по боту\n\n"
-        "📢 Уведомления:\n"
-        "/subscribe - Подписаться на рассылку уведомлений\n"
-        "/unsubscribe - Отписаться от рассылки уведомлений\n\n"
-        "✨ Советы:\n"
-        "1. Используйте точные команды, чтобы получить желаемый результат.\n"
-        "2. Если что-то не работает, сообщите через /report."
-    )
-    
-    # Проверка, является ли пользователь администратором
-    if message.from_user.id in ADMIN_IDS:
-        info_msg += "\n\n🔧 Админские команды:\n"
-        info_msg += "/broadcast - Отправить сообщение всем пользователям\n"
-        info_msg += "/add_homework - Добавить домашнее задание\n"
-
-    # Отправляем сообщение с доступными командами
-    bot.send_message(message.chat.id, info_msg)
-
-
-@bot.message_handler(commands=['help'])
-def send_help(message):
-    bot.send_message(message.chat.id, "Я могу выполнять различные математические операции. Просто введите выражение или используйте клавиатуру для выбора операции. Вот что я поддерживаю:\n- Сложение, вычитание, умножение, деление\n- Квадратный корень, степень\n- Логарифмы и тригонометрия")
-
-# ------------------------------
-# /calc_help - отображение справки по калькулятору
-# ------------------------------
-@bot.message_handler(commands=['calc_help'])
-def handle_calc_help(message):
-    # Отправляем подробную информацию о калькуляторе
-    bot.send_message(
-        message.chat.id,
-        "Привет! Я калькулятор. Вот что ты можешь со мной делать:\n\n"
-        "1. Используй стандартные математические операторы:\n"
-        "- Сложение: +\n"
-        "- Вычитание: -\n"
-        "- Умножение: *\n"
-        "- Деление: /\n"
-        "- Степень: ^ (например, 2^3)\n"
-        "- Квадратный корень: sqrt (например, sqrt 16)\n"
-        "- Факториал: ! (например, 5!)\n"
-        "- Логарифм: log(x, base) (например, log(10, 2))\n"
-        "- Тригонометрические функции: sin(x), cos(x), tan(x) (например, sin(30))\n\n"
-        "2. Примеры ввода:\n"
-        "- 3 + 5\n"
-        "- 10 * 2\n"
-        "- sqrt 25\n"
-        "- 2^3\n"
-        "- 5!\n"
-        "- log(10, 2)\n"
-        "- sin(30)\n\n"
-        "3. Вводи выражение и я вычислю результат!"
-    )
-
-# ------------------------------
-# /calc - выполнение вычислений
-# ------------------------------
-@bot.message_handler(commands=['calc'])
-def handle_calc(message):
-    bot.send_message(message.chat.id, "Введите математическое выражение для вычисления:")
-    bot.register_next_step_handler(message, process_calculation)
-
-def process_calculation(message):
-    try:
-        expression = message.text.strip().lower()  # Приводим текст к нижнему регистру
-
-        # Преобразуем выражение для поддержки новых операций
-        expression = expression.replace('^', '**')  # Заменяем ^ на **
-        expression = expression.replace('sqrt', 'math.sqrt')  # Заменяем sqrt на math.sqrt
-        expression = expression.replace('log', 'math.log')  # Заменяем log на math.log
-        expression = expression.replace('sin', 'math.sin')  # Заменяем sin на math.sin
-        expression = expression.replace('cos', 'math.cos')  # Заменяем cos на math.cos
-        expression = expression.replace('tan', 'math.tan')  # Заменяем tan на math.tan
-
-        # Обработка sqrt для добавления нужных скобок
-        expression = re.sub(r'(math\.sqrt)(\s*(\d+))', r'\1(\2)', expression)  # Преобразует "sqrt 25" в "math.sqrt(25)"
-
-        # Закрытие скобок для других математических функций, если это нужно
-        expression = re.sub(r'(math\.\w+)(\d+)', r'\1(\2)', expression)
-
-        # Обработка факториала
-        while '!' in expression:
-            match = re.search(r'(\d+)!', expression)
-            if match:
-                number = int(match.group(1))
-                factorial_result = math.factorial(number)
-                expression = expression.replace(f"{number}!", str(factorial_result))
-            else:
-                break
-
-        # Вычисление результата
-        result = eval(expression)
-        bot.send_message(message.chat.id, f"Результат: {result}")
-    except Exception as e:
-        bot.send_message(message.chat.id, f"Произошла ошибка: {str(e)}")
-
-# ------------------------------
-# ДОБАВЛЕНИЕ ДОМАШНЕГО ЗАДАНИЯ
-# ------------------------------
-@bot.message_handler(commands=['add_homework'])
-def add_homework(message):
-    if message.chat.id not in ADMIN_IDS:
-        bot.reply_to(message, "У вас нет прав для выполнения этой команды.")
-        return
-
-    bot.send_message(message.chat.id, 
-                     "Введите месяц, неделю и текст задания в формате:\nМесяц, Неделя, Задание",
-                     parse_mode="Markdown")
-    bot.register_next_step_handler(message, process_add_homework)
-
-def process_add_homework(message):
-    try:
-        data = message.text.split(", ")
-        if len(data) < 3:
-            raise ValueError("Неверный формат ввода.")
-        
-        month, week, homework_text = data[0], int(data[1]), message.text.split(", ", 2)[2]
-
-        if month not in MONTHS:
-            bot.reply_to(message, "Указан неверный месяц. Попробуйте снова.")
-            return
-
-        save_homework(month, week, homework_text)
-        bot.reply_to(message, f"Задание для {month}, Неделя {week} сохранено.")
-        
-    except Exception as e:
-        bot.reply_to(message, f"Ошибка: {e}")
-# ------------------------------
-# ПОКАЗ ДОМАШНЕГО ЗАДАНИЯ
-# ------------------------------
-@bot.message_handler(commands=['show_homework'])
-def show_homework(message):
-    try:
-        data = message.text.split(" ", 2)
-        if len(data) != 3:
-            bot.reply_to(message, "Используйте формат: /show_homework месяц неделя")
-            return
-
-        _, month, week = data
-        week = int(week)
-
-        homework = get_homework(month, week)
-        if homework:
-            bot.send_message(message.chat.id, f"📚 Домашнее задание для {month}, Неделя {week}:\n{homework}")
-        else:
-            bot.send_message(message.chat.id, f"Задание для {month}, Неделя {week} не найдено.")
-    except Exception as e:
-        bot.reply_to(message, f"Ошибка: {e}")
-
-# ------------------------------
-# КНОПКИ ДЛЯ ДОСТУПА К ДОМАШНЕМУ ЗАДАНИЮ
-# ------------------------------
-def create_month_buttons():
-    markup = InlineKeyboardMarkup()
-    for month in MONTHS:
-        markup.add(InlineKeyboardButton(month, callback_data=f"month_{month}"))
-    return markup
-
-def create_week_buttons(month):
-    weeks = get_weeks_with_homework(month)
-    markup = InlineKeyboardMarkup()
-    for week in weeks:
-        markup.add(InlineKeyboardButton(f"Неделя {week}", callback_data=f"week_{month}_{week}"))
-    return markup
-
-# ------------------------------
-# /homework
-# ------------------------------
-@bot.message_handler(commands=['homework'])
-def homework_menu(message):
-    print(f"Получена команда /homework от {message.chat.id}")  # Для отладки
-    bot.send_message(
-        message.chat.id,
-        "Выберите месяц, чтобы посмотреть задания:",
-        reply_markup=create_month_buttons()
-    )
-
-@bot.callback_query_handler(func=lambda call: call.data.startswith("month_"))
-def handle_month(call):
-    try:
-        month = call.data.split("_")[1]
-        markup = create_week_buttons(month)
-        bot.edit_message_text(
-            f"Вы выбрали {month}. Выберите неделю:",
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            reply_markup=markup
-        )
-    except Exception as e:
-        bot.send_message(call.message.chat.id, "Произошла ошибка при обработке команды.")
-        logging.error(f"Ошибка в handle_month: {e}, {str(call.data)}")  # Логируем дополнительную информацию
-
-@bot.callback_query_handler(func=lambda call: call.data.startswith("week_"))
-def handle_week(call):
-    _, month, week = call.data.split("_")
-    week = int(week)
-    homework = get_homework(month, week)
-    if homework:
-        bot.send_message(call.message.chat.id, f"📚 Домашнее задание для {month}, Неделя {week}:\n\n{homework}")
-    else:
-        bot.send_message(call.message.chat.id, f"Задание для {month}, Неделя {week} не найдено.")
-
-# Функция для отправки рассылки
-def send_broadcast(message_text):
-    try:
-        with open("subscribers.json", "r") as f:
-            subscribers = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        subscribers = []
-    
-    for user_id in subscribers:
-        try:
-            bot.send_message(user_id, message_text)
-        except Exception as e:
-            print(f"Не удалось отправить сообщение пользователю {user_id}: {e}")
-
-# Обработчик команды /broadcast
-@bot.message_handler(commands=['broadcast'])
-def handle_broadcast(message):
-    if message.chat.id == ADMIN_IDS[0]:  # Проверка на администратора
-        bot.send_message(message.chat.id, "📝 Напишите текст для рассылки.")
-        
-        # Переход к следующему состоянию — ожидание текста
-        bot.register_next_step_handler(message, broadcast_message)
-    else:
-        bot.send_message(message.chat.id, "❌ У вас нет прав для использования этой команды.")
-
-def broadcast_message(message_text):
-    """
-    Функция для отправки сообщения всем подписанным пользователям.
-    Если передан текст сообщения, отправляет его всем подписанным пользователям.
-    """
-    # Если message_text — это строка, используем её как текст
-    if isinstance(message_text, str):
-        text = message_text
-    # Если message_text — это объект Message от Telegram, извлекаем текст
-    elif hasattr(message_text, 'text'):
-        text = message_text.text
-    else:
-        # Если это не строка и не объект сообщения Telegram, выдаем ошибку
-        raise ValueError("Передан некорректный параметр для рассылки.")
-
-    # Отправляем текст всем пользователям, которые подписаны на рассылку
-    for user_id in subscribed_users:
-        try:
-            bot.send_message(user_id, text)
-            print(f"Сообщение отправлено пользователю {user_id}")
-        except Exception as e:
-            print(f"Ошибка при отправке сообщения пользователю {user_id}: {e}")
-
-
-# Функция для сохранения ID пользователя
-def save_user_id(user_id):
-    try:
-        with open("subscribers.json", "r") as f:
-            subscribers = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        subscribers = []
-    
-    if user_id not in subscribers:
-        subscribers.append(user_id)
-        with open("subscribers.json", "w") as f:
-            json.dump(subscribers, f)
-
-@bot.message_handler(commands=['subscribe'])
-def subscribe(message):
-    user_id = message.chat.id
-    save_user_id(user_id)
-    bot.send_message(user_id, "✅ Вы успешно подписались на рассылку!")
-
-@bot.message_handler(commands=['unsubscribe'])
-def unsubscribe(message):
-    user_id = message.chat.id
-    try:
-        with open("subscribers.json", "r") as f:
-            subscribers = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        subscribers = []
-    
-    if user_id in subscribers:
-        subscribers.remove(user_id)
-        with open("subscribers.json", "w") as f:
-            json.dump(subscribers, f)
-        bot.send_message(user_id, "❌ Вы отписались от рассылки.")
-    else:
-        bot.send_message(user_id, "❌ Вы не были подписаны на рассылку.")
-
-
-# Загрузка данных
-def load_users():
-    # Здесь можно подключить вашу базу данных или файл
-    try:
-        with open("user_data.json", "r") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}
-
-# Сохранение данных
-def save_users(data):
-    with open("user_data.json", "w") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
-
-@bot.message_handler(commands=['set_week'])
-def set_week(message):
-    # Проверка, является ли пользователь админом
-    if message.from_user.id not in ADMIN_IDS:
-        bot.send_message(message.chat.id, "❌ У вас нет прав для использования этой команды.")
-        return
-
-    try:
-        week_type = message.text.split()[1].strip().lower()  # Получаем тип недели из команды
-        if week_type in ['четная', 'нечетная']:
-            # Сохраняем тип недели в файл
-            with open("week_type.txt", "w") as f:
-                f.write(week_type)
-            bot.send_message(message.chat.id, f"✅ Текущая неделя установлена: {week_type.capitalize()}")
-        else:
-            bot.send_message(message.chat.id, "❌ Укажите тип недели: четная или нечетная.")
-    except IndexError:
-        bot.send_message(message.chat.id, "❌ Укажите тип недели после команды. Например: /set_week четная")
-
-@bot.message_handler(commands=['current_lesson'])
-def current_lesson(message):
-    try:
-        # Читаем текущий тип недели
-        with open("week_type.txt", "r") as f:
-            week_type = f.read().strip().lower()
-
-        # Определяем текущий день недели и время
-        moscow_tz = pytz.timezone('Europe/Moscow')
-        current_time = datetime.now(moscow_tz)
-        weekday = current_time.strftime("%A").lower()
-        current_time_str = current_time.strftime("%H:%M")
-
-        # Определяем текущую пару
-        for i, (start, end) in enumerate(lesson_times):
-            if start <= current_time_str <= end:
-                lesson_index = i
-                start_time = datetime.strptime(start, "%H:%M")
-                end_time = datetime.strptime(end, "%H:%M")
-                current_time_obj = datetime.strptime(current_time_str, "%H:%M")
-                
-                # Рассчитываем прошедшее и оставшееся время
-                elapsed_time = (current_time_obj - start_time).seconds // 60
-                remaining_time = (end_time - current_time_obj).seconds // 60
-                break
-        else:
-            bot.send_message(message.chat.id, "❌ Сейчас нет пар.")
-            return
-
-        # Получаем предмет текущей пары
-        lessons_today = schedule.get(week_type, {}).get(weekday.capitalize(), [])
-        if lesson_index < len(lessons_today):
-            current_subject = lessons_today[lesson_index]
-            bot.send_message(
-                message.chat.id,
-                f"💼 Сейчас идёт {lesson_index + 1}-я пара: {current_subject}\n"
-                f"Неделя: {week_type.capitalize()}.\n"
-                f"Прошло времени: {elapsed_time} минут.\n"
-                f"До окончания осталось: {remaining_time} минут."
-            )
-        else:
-            bot.send_message(message.chat.id, "❌ Сегодня пар больше нет.")
-    except FileNotFoundError:
-        bot.send_message(message.chat.id, "❌ Тип недели не установлен. Обратитесь к Администратору.")
-    except Exception as e:
-        bot.send_message(message.chat.id, f"❌ Произошла ошибка: {str(e)}")
-
-
-if __name__ == "__main__":
-    run_bot()require 'lib.moonloader'
+require 'lib.moonloader'
 local imgui = require 'mimgui'
 local sampev = require 'lib.samp.events'
 local vkeys = require 'vkeys'
 local encoding = require 'encoding'
 local inicfg = require 'inicfg'
 local ffi = require 'ffi'
+
 local IniFilename = 'RepFlowCFG.ini'
 local new = imgui.new
 local faicons = require('fAwesome6')
-local scriptver = "3.1 | Lite"
+local scriptver = "3.1 | Premium"
 
 local changelogEntries = {
-    { version = "2.6", description = "- Добавлено окно информации.\n- Исправлен баг с массовым спамом при сворачивании игры.\n- Исправлен баг с крашем игры при окне информации.\n- Добавлена новая вкладка 'ChangeLog'\n- Убрана вся лишняя информация с основного меню." },
-    { version = "2.7", description = "- Изменен цвет сообщений скрипта.\n- Убран лишний спам при сворачивании игры.\n- Исправлен баг в информации версии 2.6.\n- Добавлена новая информация в окно информации\n- Изменена логика сворачивания игры." },
-    { version = "2.8", description = "- Добавлен новый цвет меню.\n- Переименована вкладка 'Главная'.\nтеперь она называется флудер.\n- Добавлена функция отключить не флуди(сейчас нету репорта).\n- Мелкие исправления." },
-    { version = "3.0", description = "- Ползунки теперь настраиваются!!.\n- Изменен код меню флудера и настроек.\n- Исправлено перемещение окна информации.\n- Заменена клавиша прикрепления окна на пробел.\n- Версия 2.9 и 3.0 объединены описанием" },
-    { version = "3.1 | Lite", description = "- Новая тема - 'Светлая'.\n- Полностью переписана логика чата.\n- Было добавлено немного информации во вкладки.\n- Добавлены иконки в меню (fontAwesome6).\n- Добавлены новые индикаторы сообщений\n 'Информация' и 'RepFlow'.\n- Переписан код некоторых функций.\n- Разделение скрипта на Lite и Premium версию.\n- Улучшена оптимизация скрипта.\n- Мелкие исправления. " },
+    { version = "3.1 | Premium", description = "- Новый стиль меню.\n- ChangeLog теперь разделён на две версии.\n\nHF-1.0: Исправлены грамматические ошибки\n\nHF-1.1: Налажен цвет плиток\n- Исправлены грамматические ошибки." },
 }
 
 local keyBind = 0x5A -- клавиша активации: Z (по умолчанию)
@@ -667,9 +63,6 @@ local autoStartEnabled = new.bool(true)
 local dialogHandlerEnabled = new.bool(true)
 ----------------------------------------
 
---[[local colorList = {u8'Красная', u8'Зелёная', u8'Синяя', u8'Оранжевая', u8'Серая', u8'Светлая'}
-local colorListNumber = new.int(0)
-local colorListBuffer = new['const char*'][#colorList](colorList)--]]
 local active_tab = new.int(0)
 
 -- Загрузка конфигурации
@@ -825,7 +218,7 @@ imgui.OnInitialize(function()
     config.PixelSnapH = true
     iconRanges = imgui.new.ImWchar[3](faicons.min_range, faicons.max_range, 0)
     imgui.GetIO().Fonts:AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85('solid'), 14, config, iconRanges) -- solid - тип иконок, так же есть thin, regular, light и duotone
-	--decor() -- применяем декор часть
+	decor() -- применяем декор часть
     --themes[currentTheme[0]+1].change() -- применяем цветовую часть
 end)
 
@@ -835,20 +228,22 @@ function decor()
     local ImVec4 = imgui.ImVec4
     imgui.SwitchContext()
     local style = imgui.GetStyle()
-    style.WindowPadding = imgui.ImVec2(12, 12)
-    style.WindowRounding = 8.0
-    style.ChildRounding = 8.0
-    style.FramePadding = imgui.ImVec2(6, 6)
-    style.FrameRounding = 6.0
-    style.ItemSpacing = imgui.ImVec2(8, 8)
-    style.ItemInnerSpacing = imgui.ImVec2(6, 6)
-    style.ScrollbarSize = 12.0
-    style.ScrollbarRounding = 12.0
-    style.GrabRounding = 8.0
-    style.PopupRounding = 6.0
-    style.WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
-    style.ButtonTextAlign = imgui.ImVec2(0.5, 0.5)
+    
+    style.WindowPadding = imgui.ImVec2(12, 12)  -- Отступы внутри окон
+    style.WindowRounding = 12.0  -- Закругление углов окон
+    style.ChildRounding = 10.0   -- Закругление углов дочерних окон
+    style.FramePadding = imgui.ImVec2(8, 6)  -- Отступы внутри кнопок и полей
+    style.FrameRounding = 10.0  -- Закругление для кнопок и полей ввода
+    style.ItemSpacing = imgui.ImVec2(10, 10)  -- Увеличено расстояние между элементами
+    style.ItemInnerSpacing = imgui.ImVec2(10, 10)  -- Внутреннее расстояние для элементов
+    style.ScrollbarSize = 12.0  -- Размер полосы прокрутки
+    style.ScrollbarRounding = 10.0  -- Закругление полосы прокрутки
+    style.GrabRounding = 10.0  -- Закругление ползунков
+    style.PopupRounding = 10.0  -- Закругление всплывающих окон
+    style.WindowTitleAlign = imgui.ImVec2(0.5, 0.5)  -- Выравнивание заголовков окон по центру
+    style.ButtonTextAlign = imgui.ImVec2(0.5, 0.5)  -- Выравнивание текста кнопок по центру
 end
+
 
 
 function sampev.onServerMessage(color, text)
@@ -927,123 +322,130 @@ end
 
 function drawMainTab()
     -- Отображение заголовка
-    imgui.CenterText(u8"Настройки флудера")
+    panelColor = panelColor or imgui.ImVec4(18 / 255, 13 / 255, 22 / 255, 1) -- Установим значение по умолчанию
+    imgui.Text(faicons('gear') .. u8" Настройки  /  " .. faicons('message') .. u8" Флудер")
     imgui.Separator()
+    imgui.PushStyleColor(imgui.Col.ChildBg, panelColor) -- Устанавливаем цвет
+    if imgui.BeginChild("Flooder", imgui.ImVec2(0, 150), true) then
+        imgui.PushItemWidth(100)
 
-    imgui.PushItemWidth(100)
-
-    -- Чекбокс для использования миллисекунд
-    if imgui.Checkbox(u8'Использовать миллисекунды', useMilliseconds) then
-        ini.main.useMilliseconds = useMilliseconds[0]
-        inicfg.save(ini, IniFilename)
-    end
-
-    imgui.PopItemWidth()
-
-    -- Текстовое поле для интервала отправки команды /ot
-    imgui.Text(u8'Интервал отправки команды /ot (' .. (useMilliseconds[0] and u8'в миллисекундах' or u8'в секундах') .. '):')
-
-    -- Текущее значение интервала
-    imgui.Text(u8'Текущий интервал: ' .. otInterval[0] .. (useMilliseconds[0] and u8' мс' or u8' секунд'))
-
-    imgui.PushItemWidth(45)
-
-    -- Поле для ввода интервала
-    imgui.InputText(u8'##otIntervalInput', otIntervalBuffer, ffi.sizeof(otIntervalBuffer))
-    imgui.SameLine()
-    -- Кнопка для сохранения интервала
-    if imgui.Button(faicons('floppy_disk') .. u8" Сохранить интервал") then
-        local newValue = tonumber(ffi.string(otIntervalBuffer)) -- Преобразуем строку в число
-        if newValue ~= nil then
-            otInterval[0] = newValue -- Обновляем значение otInterval
-            ini.main.otInterval = otInterval[0] -- Сохраняем в конфиг
+        -- Чекбокс для использования миллисекунд
+        if imgui.Checkbox(u8'Использовать миллисекунды', useMilliseconds) then
+            ini.main.useMilliseconds = useMilliseconds[0]
             inicfg.save(ini, IniFilename)
-            sampAddChatMessage(taginf .. "Интервал сохранён: {32CD32}" .. newValue .. (useMilliseconds[0] and " мс" or " секунд"), -1)
-        else
-            sampAddChatMessage(taginf .. "Некорректное значение. {32CD32}Введите число.", -1)
+        end
+
+        imgui.PopItemWidth()
+        
+        -- Текстовое поле для интервала отправки команды /ot
+        imgui.Text(u8'Интервал отправки команды /ot (' .. (useMilliseconds[0] and u8'в миллисекундах' or u8'в секундах') .. '):')
+
+        -- Текущее значение интервала
+        imgui.Text(u8'Текущий интервал: ' .. otInterval[0] .. (useMilliseconds[0] and u8' мс' or u8' секунд'))
+
+        imgui.PushItemWidth(45)
+
+        -- Поле для ввода интервала
+        imgui.InputText(u8'##otIntervalInput', otIntervalBuffer, ffi.sizeof(otIntervalBuffer))
+        imgui.SameLine()
+        -- Кнопка для сохранения интервала
+        if imgui.Button(faicons('floppy_disk') .. u8" Сохранить интервал") then
+            local newValue = tonumber(ffi.string(otIntervalBuffer)) -- Преобразуем строку в число
+            if newValue ~= nil then
+                otInterval[0] = newValue -- Обновляем значение otInterval
+                ini.main.otInterval = otInterval[0] -- Сохраняем в конфиг
+                inicfg.save(ini, IniFilename)
+                sampAddChatMessage(taginf .. "Интервал сохранён: {32CD32}" .. newValue .. (useMilliseconds[0] and " мс" or " секунд"), -1)
+            else
+                sampAddChatMessage(taginf .. "Некорректное значение. {32CD32}Введите число.", -1)
+            end
         end
     end
-
     imgui.PopItemWidth()
-
-    imgui.Separator()
+    imgui.EndChild()
+    imgui.PopStyleColor() -- Сбрасываем цвет
 
     -- Информационные сообщения
-    imgui.Text(u8'Скрипт также ищет надпись в чате [Репорт] от Имя_Фамилия.')
-    imgui.Text(u8'Флудер нужен для дополнительного способа ловли репорта.')
-
-    imgui.Separator()
+    imgui.PushStyleColor(imgui.Col.ChildBg, panelColor) -- Устанавливаем цвет
+    if imgui.BeginChild("InfoFlooder", imgui.ImVec2(0, 65), true) then
+        imgui.Text(u8'Скрипт также ищет надпись в чате [Репорт] от Имя_Фамилия.')
+        imgui.Text(u8'Флудер нужен для дополнительного способа ловли репорта.')
+    end
+    imgui.EndChild()
+    imgui.PopStyleColor() -- Сбрасываем цвет
 end
 
 function drawSettingsTab()
     -- Заголовок с иконками для вкладки
     imgui.Text(faicons('gear') .. u8" Настройки  /  " .. faicons('sliders') .. u8" Основные настройки")
     imgui.Separator()
-
-    -- Создаем блок настройки клавиши активации
-    imgui.BeginChild("ActivationKey", imgui.ImVec2(0, 60), true)
-    imgui.Text(u8'Текущая клавиша активации:')
-    imgui.SameLine()
-    if imgui.Button(u8'' .. keyBindName) then
-        changingKey = true
-        show_arz_notify('info', 'RepFlow', 'Нажмите новую клавишу для активации', 2000)
+    panelColor = panelColor or imgui.ImVec4(18 / 255, 13 / 255, 22 / 255, 1) -- Установим значение по умолчанию
+    -- Первый блок: информация об авторе
+    imgui.PushStyleColor(imgui.Col.ChildBg, panelColor) -- Устанавливаем цвет
+    if imgui.BeginChild("KeyBind", imgui.ImVec2(0, 60), true) then
+        imgui.Text(u8'Текущая клавиша активации:')
+        imgui.SameLine()
+        if imgui.Button(u8'' .. keyBindName) then
+            changingKey = true
+            show_arz_notify('info', 'RepFlow', 'Нажмите новую клавишу для активации', 2000)
+        end
     end
     imgui.EndChild()
-    imgui.Separator()
-
-    -- Блок выбора темы
-    imgui.BeginChild("ThemeSelector", imgui.ImVec2(0, 120), true)
-    imgui.Text(u8'Выберите тему:')
-    drawThemeSelector() -- Селектор тем через квадратики
-    imgui.EndChild()
-    imgui.Separator()
+    imgui.PopStyleColor() -- Сбрасываем цвет
 
     -- Блок обработки диалогов
-    imgui.BeginChild("DialogOptions", imgui.ImVec2(0, 100), true)
-    imgui.Text(u8"Обработка диалогов")
-    if imgui.Checkbox(u8'Обрабатывать диалоги', dialogHandlerEnabled) then
-        ini.main.dialogHandlerEnabled = dialogHandlerEnabled[0]
-        inicfg.save(ini, IniFilename)
-    end
-    if imgui.Checkbox(u8'Автостарт ловли по большому активу', autoStartEnabled) then
-        ini.main.autoStartEnabled = autoStartEnabled[0]
-        inicfg.save(ini, IniFilename)
-    end
-    if imgui.Checkbox(u8'Отключить сообщение "Не флуди"', hideFloodMsg) then
-        ini.main.otklflud = hideFloodMsg[0]
-        inicfg.save(ini, IniFilename)
+    imgui.PushStyleColor(imgui.Col.ChildBg, panelColor) -- Устанавливаем цвет
+    if imgui.BeginChild("DialogOptions", imgui.ImVec2(0, 150), true) then
+        imgui.Text(u8"Обработка диалогов")
+        if imgui.Checkbox(u8'Обрабатывать диалоги', dialogHandlerEnabled) then
+            ini.main.dialogHandlerEnabled = dialogHandlerEnabled[0]
+            inicfg.save(ini, IniFilename)
+        end
+        if imgui.Checkbox(u8'Автостарт ловли по большому активу', autoStartEnabled) then
+            ini.main.autoStartEnabled = autoStartEnabled[0]
+            inicfg.save(ini, IniFilename)
+        end
+        if imgui.Checkbox(u8'Отключить сообщение "Не флуди"', hideFloodMsg) then
+            ini.main.otklflud = hideFloodMsg[0]
+            inicfg.save(ini, IniFilename)
+        end
     end
     imgui.EndChild()
-    imgui.Separator()
+    imgui.PopStyleColor() -- Сбрасываем цвет
 
     -- Блок ввода тайм-аута для автостарта
-    imgui.BeginChild("AutoStartTimeout", imgui.ImVec2(0, 100), true)
-    imgui.Text(u8'Настройка тайм-аута автостарта')
-    imgui.PushItemWidth(45)
-    imgui.Text(u8'Текущий тайм-аут: ' .. dialogTimeout[0] .. u8' секунд')
-    imgui.InputText(u8'', dialogTimeoutBuffer, ffi.sizeof(dialogTimeoutBuffer))
-    imgui.SameLine()
-    if imgui.Button(faicons('floppy_disk') .. u8" Сохранить тайм-аут") then
-        local newValue = tonumber(ffi.string(dialogTimeoutBuffer))
-        if newValue ~= nil and newValue >= 1 and newValue <= 9999 then
-            dialogTimeout[0] = newValue -- Обновляем тайм-аут
-            saveSettings() -- Сохраняем изменения
-            sampAddChatMessage(taginf .. "Тайм-аут сохранён: {32CD32}" .. newValue .. " секунд", -1)
-        else
-            sampAddChatMessage(taginf .. "Некорректное значение. {32CD32}Введите от 1 до 9999.", -1)
+    imgui.PushStyleColor(imgui.Col.ChildBg, panelColor) -- Устанавливаем цвет
+    if imgui.BeginChild("AutoStartTimeout", imgui.ImVec2(0, 100), true) then
+        imgui.Text(u8'Настройка тайм-аута автостарта')
+        imgui.PushItemWidth(45)
+        imgui.Text(u8'Текущий тайм-аут: ' .. dialogTimeout[0] .. u8' секунд')
+        imgui.InputText(u8'', dialogTimeoutBuffer, ffi.sizeof(dialogTimeoutBuffer))
+        imgui.SameLine()
+        if imgui.Button(faicons('floppy_disk') .. u8" Сохранить тайм-аут") then
+            local newValue = tonumber(ffi.string(dialogTimeoutBuffer))
+            if newValue ~= nil and newValue >= 1 and newValue <= 9999 then
+                dialogTimeout[0] = newValue -- Обновляем тайм-аут
+                saveSettings() -- Сохраняем изменения
+                sampAddChatMessage(taginf .. "Тайм-аут сохранён: {32CD32}" .. newValue .. " секунд", -1)
+            else
+                sampAddChatMessage(taginf .. "Некорректное значение. {32CD32}Введите от 1 до 9999.", -1)
+            end
         end
     end
     imgui.PopItemWidth()
+    imgui.PopStyleColor() -- Сбрасываем цвет
     imgui.EndChild()
-    imgui.Separator()
 
     -- Блок изменения положения окна
-    imgui.BeginChild("WindowPosition", imgui.ImVec2(0, 50), true)
-    imgui.Text(u8'Положение окна информации:')
-    imgui.SameLine()
-    if imgui.Button(u8'Изменить положение') then
-        startMovingWindow() -- Активируем перемещение окна при нажатии
+    imgui.PushStyleColor(imgui.Col.ChildBg, panelColor) -- Устанавливаем цвет
+    if imgui.BeginChild("WindowPosition", imgui.ImVec2(0, 50), true) then
+        imgui.Text(u8'Положение окна информации:')
+        imgui.SameLine()
+        if imgui.Button(u8'Изменить положение') then
+            startMovingWindow() -- Активируем перемещение окна при нажатии
+        end
     end
+    imgui.PopStyleColor() -- Сбрасываем цвет
     imgui.EndChild()
 end
 
@@ -1053,7 +455,7 @@ function saveColorCode()
 end
 
 function filterFloodMessage(text)
-    if hideFloodMsg[0] and text:find("%[Ошибка%] {FFFFFF}Сейчас нет вопросов в репорт!") then
+    if hideFloodMsg[0] and text:find("%[Ошибка%] {FFFFFF}Сейчас нет вопросов в репорт!") or text:find("%[Ошибка%] {FFFFFF}Не флуди!") then
         return false -- Блокируем сообщение "Не флуди"
     end
 end
@@ -1088,26 +490,50 @@ function checkPauseAndDisableAutoStart()
     end
 end
 
-function drawInfoTab()
-    imgui.CenterText(u8'Информация о скрипте')
+function drawInfoTab(panelColor)
+    panelColor = panelColor or imgui.ImVec4(18 / 255, 13 / 255, 22 / 255, 1) -- Установим значение по умолчанию
+    -- Заголовок с иконками
+    imgui.Text(faicons('star') .. u8" RepFlow  /  " .. faicons('circle_info') .. u8" Информация")
     imgui.Separator()
-    imgui.Text(u8'Автор: Matthew_McLaren[18]')
-    imgui.Text(u8'Версия: %s', scriptver)
-	imgui.Text(u8'Связь с разработчиком:')
-	imgui.SameLine()
-	imgui.Link('https://t.me/Zorahm', 'Telegram')
-    imgui.Text(u8'')
-    imgui.Text(u8'Скрипт автоматически отправляет команду /ot.')
-    imgui.Text(u8'Через определенные интервалы времени.')
-    imgui.Text(u8'А также выслеживает определенные надписи.')
-	imgui.Text(u8'')
-    imgui.CenterText(u8'А также спасибо:')
-    imgui.Text(u8'Тестер: Carl_Mort[18].')
+
+    -- Первый блок: информация об авторе
+    imgui.PushStyleColor(imgui.Col.ChildBg, panelColor) -- Устанавливаем цвет
+    if imgui.BeginChild("Author", imgui.ImVec2(0, 100), true) then
+        imgui.Text(u8'Автор: Matthew_McLaren[18]')
+        imgui.Text(u8'Версия: ' .. scriptver) -- Используем конкатенацию вместо %s
+        imgui.Text(u8'Связь с разработчиком:')
+        imgui.SameLine()
+        imgui.Link('https://t.me/Zorahm', 'Telegram')
+    end
+    imgui.EndChild()
+    imgui.PopStyleColor() -- Сбрасываем цвет
+
+    -- Второй блок: описание функционала
+    imgui.PushStyleColor(imgui.Col.ChildBg, panelColor) -- Устанавливаем цвет
+    if imgui.BeginChild("Info2", imgui.ImVec2(0, 100), true) then
+        imgui.Text(u8'Скрипт автоматически отправляет команду /ot.')
+        imgui.Text(u8'Через определенные интервалы времени.')
+        imgui.Text(u8'А также выслеживает определенные надписи.')
+    end
+    imgui.EndChild()
+    imgui.PopStyleColor() -- Сбрасываем цвет
+
+    -- Третий блок: благодарности
+    imgui.PushStyleColor(imgui.Col.ChildBg, panelColor) -- Устанавливаем цвет
+    if imgui.BeginChild("Info3", imgui.ImVec2(0, 110), true) then
+        imgui.CenterText(u8'А также спасибо:')
+        imgui.Text(u8'Тестер: Carl_Mort[18].')
+        imgui.Text(u8'Тестер: Sweet_Lemonte[18].')
+        imgui.Text(u8'Тестер: Balenciaga_Collins[18].')
+    end
+    imgui.EndChild()
+    imgui.PopStyleColor() -- Сбрасываем цвет
 end
+
 
 -- Функция для отрисовки вкладки "ChangeLog"
 function drawChangeLogTab()
-    imgui.CenterText(u8("Изменения по версиям:"))
+    imgui.Text(faicons('star') .. u8" RepFlow  /  " .. faicons('bolt') .. u8" ChangeLog")
     imgui.Separator()
 
     -- Проходим по каждому элементу в changelog
@@ -1120,58 +546,58 @@ function drawChangeLogTab()
 end
 
 imgui.OnFrame(function() return main_window_state[0] end, function(player)
-    imgui.SetNextWindowSize(imgui.ImVec2(600, 400), imgui.Cond.FirstUseEver)
+    -- Настройка начального окна
+    imgui.SetNextWindowSize(imgui.ImVec2(800, 500), imgui.Cond.FirstUseEver)
     imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
     imgui.PushStyleColor(imgui.Col.WindowBg, colors.rightPanelColor)
-    imgui.Begin(u8'Настройки', main_window_state, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse)
-    
-    -- Левый панель с вкладками
-    imgui.BeginChild("left_panel", imgui.ImVec2(150, 0), true, imgui.WindowFlags.NoScrollbar)
-    imgui.PushStyleColor(imgui.Col.ChildBg, colors.leftPanelColor)
-    -- imgui.PushStyleVar(imgui.StyleVar.ChildRounding, 5)
-    
-    -- Оформление кнопок для вкладок
-    local tabNames = { "Оформление", "Настройки", "Информация" }
-    for i, name in ipairs(tabNames) do
-        if i - 1 == active_tab[0] then
-            imgui.PushStyleColor(imgui.Col.Button, colors.hoverColor)
-        else
-            imgui.PushStyleColor(imgui.Col.Button, colors.leftPanelColor)
+    resetIO()
+
+    -- Открываем главное окно
+    if imgui.Begin(faicons('bolt') .. u8' RepFlow | Premium', main_window_state, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse) then
+
+        -- Левый панель с вкладками (убраны стили разделителей)
+        imgui.PushStyleColor(imgui.Col.ChildBg, colors.leftPanelColor)
+        if imgui.BeginChild("left_panel", imgui.ImVec2(130, -1), false) then
+            local tabNames = { "Флудер", "Настройки", "Информация", "ChangeLog" }
+            for i, name in ipairs(tabNames) do
+                if i - 1 == active_tab[0] then
+                    imgui.PushStyleColor(imgui.Col.Button, colors.hoverColor)
+                else
+                    imgui.PushStyleColor(imgui.Col.Button, colors.leftPanelColor)
+                end
+                imgui.PushStyleColor(imgui.Col.ButtonHovered, colors.hoverColor)
+                imgui.PushStyleColor(imgui.Col.ButtonActive, colors.hoverColor)
+
+                if imgui.Button(u8(name), imgui.ImVec2(125, 40)) then
+                    active_tab[0] = i - 1
+                end
+                imgui.PopStyleColor(3)  -- Сбрасываем 3 стиля для каждой кнопки
+            end
         end
-        imgui.PushStyleColor(imgui.Col.ButtonHovered, colors.hoverColor)
-        imgui.PushStyleColor(imgui.Col.ButtonActive, colors.hoverColor)
-        
-        if imgui.Button(u8(name), imgui.ImVec2(125, 40)) then
-            active_tab[0] = i - 1
+        imgui.EndChild()
+        imgui.PopStyleColor()
+
+
+        -- Панель для содержимого вкладок без явного разделения
+        imgui.SameLine() -- Убирает "разрыв" между панелями
+        imgui.PushStyleColor(imgui.Col.ChildBg, colors.rightPanelColor)
+        if imgui.BeginChild("right_panel", imgui.ImVec2(-1, 0), false) then
+            if active_tab[0] == 0 then
+                drawMainTab()
+            elseif active_tab[0] == 1 then
+                drawSettingsTab()
+            elseif active_tab[0] == 2 then
+                drawInfoTab(infoPanelColor)
+            elseif active_tab[0] == 3 then
+                drawChangeLogTab()
+            end
         end
-        imgui.PopStyleColor(3)
+        imgui.EndChild()
+        imgui.PopStyleColor()
+
     end
-    
-    imgui.PopStyleColor()
-    imgui.PopStyleVar()
-    imgui.EndChild()
-
-    imgui.SameLine()
-
-    -- Панель для содержимого вкладок
-    imgui.BeginChild("right_panel", imgui.ImVec2(0, 0), true)
-    imgui.PushStyleColor(imgui.Col.ChildBg, colors.childPanelColor)
-    -- imgui.PushStyleVar(imgui.StyleVar.ChildRounding, 10)
-
-    if active_tab[0] == 0 then
-        drawThemeTab()
-    elseif active_tab[0] == 1 then
-        drawSettingsTab()
-    elseif active_tab[0] == 2 then
-        drawInfoTab()
-    end
-
-    imgui.PopStyleColor()
-    imgui.PopStyleVar()
-    imgui.EndChild()
-
-    imgui.End()
-    imgui.PopStyleColor()
+    imgui.End() -- Закрываем главное окно
+    imgui.PopStyleColor() -- Сбрасываем цвет главного окна
 end)
 
 function onWindowMessage(msg, wparam, lparam)
@@ -1248,7 +674,7 @@ imgui.OnFrame(function() return info_window_state[0] end, function(self)
     imgui.SetNextWindowPos(imgui.ImVec2(ini.widget.posX, ini.widget.posY), imgui.Cond.Always)
 
     -- Начало окна с флагами
-    imgui.Begin(faicons('gear') .. u8" Информация " .. faicons('gear'), info_window_state, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse)
+    imgui.Begin(faicons('star') .. u8" | Информация ", info_window_state, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse)
     imgui.CenterText(u8'Статус Ловли: Включена')
     -- Время работы автоловли
     local elapsedTime = os.clock() - startTime
